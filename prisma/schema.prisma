@@ -1,0 +1,466 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+///////////////////////////////////////////////////////////
+// ENUMS
+///////////////////////////////////////////////////////////
+
+enum UserRole {
+  ADMIN
+  FAMILY
+  VIEWER
+}
+
+enum GuestSide {
+  BRIDE
+  GROOM
+  BOTH
+}
+
+enum RSVPStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum FoodPreference {
+  VEG
+  NON_VEG
+  JAIN
+  VEGAN
+}
+
+enum EventType {
+  ENGAGEMENT
+  HALDI
+  MEHENDI
+  SANGEET
+  WEDDING
+  RECEPTION
+  COCKTAIL
+  OTHER
+}
+
+enum VendorCategory {
+  VENUE
+  CATERING
+  DECOR
+  PHOTOGRAPHY
+  VIDEOGRAPHY
+  MUSIC
+  HOTEL
+  TRANSPORT
+  MAKEUP
+  OTHER
+}
+
+enum BudgetCategory {
+  VENUE
+  FOOD
+  DECOR
+  PHOTOGRAPHY
+  HOTEL
+  TRANSPORT
+  GIFTS
+  CLOTHES
+  JEWELLERY
+  OTHER
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum FieldType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  DATE
+  SELECT
+}
+
+///////////////////////////////////////////////////////////
+// USERS
+///////////////////////////////////////////////////////////
+
+model User {
+  id String @id @default(cuid())
+
+  email String @unique
+
+  fullName String
+
+  role UserRole @default(FAMILY)
+
+  weddings Wedding[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+///////////////////////////////////////////////////////////
+// WEDDING
+///////////////////////////////////////////////////////////
+
+model Wedding {
+  id String @id @default(cuid())
+
+  title String
+
+  brideName String
+
+  groomName String
+
+  startDate DateTime
+
+  endDate DateTime?
+
+  location String?
+
+  description String?
+
+  ownerId String
+
+  owner User @relation(fields: [ownerId], references: [id])
+
+  events Event[]
+
+  families Family[]
+
+  guests Guest[]
+
+  vendors Vendor[]
+
+  budgets Budget[]
+
+  tasks Task[]
+
+  documents Document[]
+
+  guestFields GuestCustomField[]
+
+  budgetFields BudgetCustomField[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+///////////////////////////////////////////////////////////
+// FAMILY
+///////////////////////////////////////////////////////////
+
+model Family {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  familyName String
+
+  city String?
+
+  notes String?
+
+  guests Guest[]
+
+  createdAt DateTime @default(now())
+}
+
+///////////////////////////////////////////////////////////
+// GUEST
+///////////////////////////////////////////////////////////
+
+model Guest {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  familyId String?
+
+  family Family? @relation(fields: [familyId], references: [id])
+
+  fullName String
+
+  phone String?
+
+  email String?
+
+  address String?
+
+  city String?
+
+  side GuestSide @default(BOTH)
+
+  relation String?
+
+  food FoodPreference?
+
+  invitationSent Boolean @default(false)
+
+  invitationDelivered Boolean @default(false)
+
+  accommodationRequired Boolean @default(false)
+
+  transportRequired Boolean @default(false)
+
+  giftReceived Boolean @default(false)
+
+  notes String?
+
+  events GuestEvent[]
+
+  customValues GuestCustomValue[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+///////////////////////////////////////////////////////////
+// EVENTS
+///////////////////////////////////////////////////////////
+
+model Event {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  title String
+
+  type EventType
+
+  venue String?
+
+  startTime DateTime
+
+  endTime DateTime?
+
+  guests GuestEvent[]
+
+  createdAt DateTime @default(now())
+}
+
+///////////////////////////////////////////////////////////
+// RSVP PER EVENT
+///////////////////////////////////////////////////////////
+
+model GuestEvent {
+  id String @id @default(cuid())
+
+  guestId String
+
+  guest Guest @relation(fields: [guestId], references: [id])
+
+  eventId String
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  rsvp RSVPStatus @default(PENDING)
+
+  checkedIn Boolean @default(false)
+
+  mealTaken Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@unique([guestId, eventId])
+}
+
+///////////////////////////////////////////////////////////
+// BUDGET
+///////////////////////////////////////////////////////////
+
+model Budget {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  title String
+
+  items BudgetItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model BudgetItem {
+  id String @id @default(cuid())
+
+  budgetId String
+
+  budget Budget @relation(fields: [budgetId], references: [id])
+
+  category BudgetCategory
+
+  description String
+
+  estimated Float
+
+  actual Float?
+
+  paid Float?
+
+  vendorId String?
+
+  vendor Vendor? @relation(fields: [vendorId], references: [id])
+
+  customValues BudgetCustomValue[]
+
+  createdAt DateTime @default(now())
+}
+
+///////////////////////////////////////////////////////////
+// VENDORS
+///////////////////////////////////////////////////////////
+
+model Vendor {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  name String
+
+  category VendorCategory
+
+  phone String?
+
+  email String?
+
+  address String?
+
+  notes String?
+
+  budgetItems BudgetItem[]
+
+  createdAt DateTime @default(now())
+}
+
+///////////////////////////////////////////////////////////
+// TASKS
+///////////////////////////////////////////////////////////
+
+model Task {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  title String
+
+  description String?
+
+  priority TaskPriority @default(MEDIUM)
+
+  completed Boolean @default(false)
+
+  dueDate DateTime?
+
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+}
+
+///////////////////////////////////////////////////////////
+// DOCUMENTS
+///////////////////////////////////////////////////////////
+
+model Document {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  title String
+
+  fileUrl String
+
+  uploadedAt DateTime @default(now())
+}
+
+///////////////////////////////////////////////////////////
+// DYNAMIC GUEST COLUMNS
+///////////////////////////////////////////////////////////
+
+model GuestCustomField {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  name String
+
+  type FieldType
+
+  values GuestCustomValue[]
+}
+
+model GuestCustomValue {
+  id String @id @default(cuid())
+
+  guestId String
+
+  guest Guest @relation(fields: [guestId], references: [id])
+
+  fieldId String
+
+  field GuestCustomField @relation(fields: [fieldId], references: [id])
+
+  value String?
+
+  @@unique([guestId, fieldId])
+}
+
+///////////////////////////////////////////////////////////
+// DYNAMIC BUDGET COLUMNS
+///////////////////////////////////////////////////////////
+
+model BudgetCustomField {
+  id String @id @default(cuid())
+
+  weddingId String
+
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+
+  name String
+
+  type FieldType
+
+  values BudgetCustomValue[]
+}
+
+model BudgetCustomValue {
+  id String @id @default(cuid())
+
+  budgetItemId String
+
+  budgetItem BudgetItem @relation(fields: [budgetItemId], references: [id])
+
+  fieldId String
+
+  field BudgetCustomField @relation(fields: [fieldId], references: [id])
+
+  value String?
+
+  @@unique([budgetItemId, fieldId])
+}
