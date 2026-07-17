@@ -79,16 +79,18 @@ model Guest {
 }
 
 model Event {
-  id        String       @id @default(cuid())
-  title     String
-  venue     String?
-  startTime DateTime
-  endTime   DateTime?
+  id String @id @default(cuid())
   weddingId String
-  createdAt DateTime     @default(now())
-  type      EventType
-  wedding   Wedding      @relation(fields: [weddingId], references: [id])
-  guests    GuestEvent[]
+  wedding Wedding @relation(fields: [weddingId], references: [id])
+  title String
+  type EventType
+  venue String?
+  description String?
+  startTime DateTime
+  endTime DateTime?
+  guests GuestEvent[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model GuestEvent {

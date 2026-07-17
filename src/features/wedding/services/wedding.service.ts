@@ -138,15 +138,38 @@ export type WeddingDetails =
 
 
 export async function getWeddingById(
-  weddingId: string
-): Promise<WeddingDetails | null> {
-
+  id: string
+) {
   return prisma.wedding.findUnique({
     where: {
-      id: weddingId,
+      id,
     },
 
-    ...weddingDetailsArgs,
-  });
+    include: {
 
+      guests: {
+        orderBy: {
+          fullName: "asc",
+        },
+      },
+
+      events: {
+        orderBy: {
+          startTime: "asc",
+        },
+      },
+
+      // keep these ready for future modules
+      families: true,
+
+      budgets: true,
+
+      vendors: true,
+
+      tasks: true,
+
+      documents: true,
+
+    },
+  });
 }
