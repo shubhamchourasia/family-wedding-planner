@@ -4,15 +4,15 @@ import { useState } from "react";
 
 import {
   GuestList,
-} from "./guest-list";
+} from "@/features/guest/components/guest-list";
 
 import {
-  AddGuestDialog,
-} from "./add-guest-dialog";
+  CreateGuestDialog,
+} from "@/features/guest/components/create-guest-dialog";
 
 import {
-  getGuestsByWedding,
-} from "../services/guest.service";
+  getGuestsAction,
+} from "@/features/guest/actions/get-guests";
 
 interface WeddingGuestsProps {
   weddingId: string;
@@ -42,7 +42,7 @@ export function WeddingGuests({
   async function refreshGuests() {
 
     const updatedGuests =
-      await getGuestsByWedding(
+      await getGuestsAction(
         weddingId
       );
 
@@ -65,7 +65,7 @@ export function WeddingGuests({
           </p>
         </div>
 
-        <AddGuestDialog
+        <CreateGuestDialog
           weddingId={weddingId}
           onSuccess={refreshGuests}
         />
