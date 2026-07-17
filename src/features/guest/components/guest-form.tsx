@@ -61,10 +61,7 @@ const GUEST_SIDES = [
 ] as const;
 
 const FOOD_OPTIONS = [
-  "VEG",
-  "NON_VEG",
-  "JAIN",
-  "VEGAN",
+  "VEG"
 ] as const;
 
 function formatLabel(value: string) {
