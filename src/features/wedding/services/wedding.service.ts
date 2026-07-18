@@ -146,7 +146,18 @@ export async function getWeddingById(
 
       vendors: true,
 
-      tasks: true,
+      taskLists: {
+        include: {
+          tasks: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
 
       documents: true,
 

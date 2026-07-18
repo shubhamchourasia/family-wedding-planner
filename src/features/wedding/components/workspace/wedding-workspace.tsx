@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useState,
+} from "react";
 
 import {
   WeddingHeader,
@@ -32,12 +34,13 @@ import {
 } from "./wedding-vendors";
 
 import {
-  WeddingTasks,
-} from "./wedding-tasks";
-
-import {
   WeddingDocuments,
 } from "./wedding-documents";
+
+import {
+  TaskDashboard,
+} from "@/features/task/components/task-dashboard";
+
 
 interface WeddingWorkspaceProps {
   wedding: {
@@ -55,16 +58,33 @@ interface WeddingWorkspaceProps {
     events: any[];
     budgetItems: any[];
     vendors: any[];
-    tasks: any[];
     documents: any[];
+
+    taskLists: Array<{
+      id: string;
+      name: string;
+      tasks: Array<{
+        id: string;
+        title: string;
+        category: string;
+        addedBy: string;
+        dueDate: Date | null;
+        remarks: string | null;
+      }>;
+    }>;
   };
 }
+
 
 export function WeddingWorkspace({
   wedding,
 }: WeddingWorkspaceProps) {
-  const [activeTab, setActiveTab] =
-    useState<WeddingTab>("Overview");
+
+  const [
+    activeTab,
+    setActiveTab,
+  ] = useState<WeddingTab>("Overview");
+
 
   return (
     <div className="space-y-6">
@@ -73,49 +93,88 @@ export function WeddingWorkspace({
         wedding={wedding}
       />
 
+
       <WeddingTabs
         activeTab={activeTab}
         onChange={setActiveTab}
       />
 
-      {activeTab === "Overview" && (
-        <WeddingOverview
-          wedding={wedding}
-        />
-      )}
 
-      {activeTab === "Events" && (
-        <WeddingEvents
-          wedding={wedding}
-        />
-      )}
+      {
+        activeTab === "Overview" && (
+          <WeddingOverview
+            wedding={wedding}
+          />
+        )
+      }
 
-      {activeTab === "Guests" && (
-        <WeddingGuests
-          weddingId={wedding.id}
-          guests={wedding.guests}
-        />
-      )}
 
-      {activeTab === "Budget" && (
-        <WeddingBudget
-          weddingId={wedding.id}
-          overallBudget={wedding.overallBudget}
-          budgetItems={wedding.budgetItems}
-        />
-      )}
+      {
+        activeTab === "Events" && (
+          <WeddingEvents
+            wedding={wedding}
+          />
+        )
+      }
 
-      {activeTab === "Vendors" && (
-        <WeddingVendors />
-      )}
 
-      {activeTab === "Tasks" && (
-        <WeddingTasks />
-      )}
+      {
+        activeTab === "Guests" && (
+          <WeddingGuests
+            weddingId={
+              wedding.id
+            }
+            guests={
+              wedding.guests
+            }
+          />
+        )
+      }
 
-      {activeTab === "Documents" && (
-        <WeddingDocuments />
-      )}
+
+      {
+        activeTab === "Budget" && (
+          <WeddingBudget
+            weddingId={
+              wedding.id
+            }
+            overallBudget={
+              wedding.overallBudget
+            }
+            budgetItems={
+              wedding.budgetItems
+            }
+          />
+        )
+      }
+
+
+      {
+        activeTab === "Vendors" && (
+          <WeddingVendors />
+        )
+      }
+
+
+      {
+        activeTab === "Tasks" && (
+          <TaskDashboard
+            weddingId={
+              wedding.id
+            }
+            taskLists={
+              wedding.taskLists
+            }
+          />
+        )
+      }
+
+
+      {
+        activeTab === "Documents" && (
+          <WeddingDocuments />
+        )
+      }
 
     </div>
   );
