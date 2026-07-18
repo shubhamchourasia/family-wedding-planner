@@ -4,6 +4,11 @@ import {
   useState,
 } from "react";
 
+import type {
+  TaskCategory,
+  TaskAddedBy,
+} from "@prisma/client";
+
 import {
   WeddingHeader,
 } from "./wedding-header";

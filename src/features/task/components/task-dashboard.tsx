@@ -8,11 +8,6 @@ import {
   TaskListCard,
 } from "./task-list-card";
 
-import type {
-  TaskCategory,
-  TaskAddedBy,
-} from "@prisma/client";
-
 
 interface TaskDashboardProps {
   weddingId: string;
@@ -22,8 +17,8 @@ interface TaskDashboardProps {
     tasks: Array<{
       id: string;
       title: string;
-      category: TaskCategory;
-      addedBy: TaskAddedBy;
+      category: string;
+      addedBy: string;
       dueDate: Date | null;
       remarks: string | null;
     }>;
