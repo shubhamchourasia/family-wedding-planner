@@ -39,6 +39,7 @@ model Wedding {
   guestFields   GuestCustomField[]
   tasks         Task[]
   vendors       Vendor[]
+  taskLists     TaskList[]
   owner         User                @relation(fields: [ownerId], references: [id])
 }
 
@@ -51,6 +52,33 @@ model Family {
   createdAt  DateTime @default(now())
   wedding    Wedding  @relation(fields: [weddingId], references: [id])
   guests     Guest[]
+}
+
+model TaskList {
+  id        String   @id @default(cuid())
+  weddingId String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  wedding   Wedding  @relation(fields: [weddingId], references: [id])
+  tasks     Task[]
+}
+
+model Task {
+  id          String       @id @default(cuid())
+  taskListId  String
+  title       String
+  category    TaskCategory
+  dueDate     DateTime?
+  remarks     String?
+  addedBy     TaskAddedBy
+  completed   Boolean      @default(false)
+  completedAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  taskList    TaskList     @relation(fields: [taskListId], references: [id], onDelete: Cascade)
+  wedding     Wedding?     @relation(fields: [weddingId], references: [id])
+  weddingId   String?
 }
 
 model Guest {
@@ -117,7 +145,7 @@ model BudgetItem {
   actual       Float?
   paid         Float?
   remarks      String?
-  addedBy BudgetAddedBy @default(SHUBHAM)
+  addedBy      BudgetAddedBy       @default(SHUBHAM)
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
   wedding      Wedding             @relation(fields: [weddingId], references: [id])
@@ -125,29 +153,16 @@ model BudgetItem {
 }
 
 model Vendor {
-  id          String         @id @default(cuid())
-  name        String
-  phone       String?
-  email       String?
-  weddingId   String
-  address     String?
-  createdAt   DateTime       @default(now())
-  notes       String?
-  category    VendorCategory
-  wedding     Wedding        @relation(fields: [weddingId], references: [id])
-}
-
-model Task {
-  id          String       @id @default(cuid())
-  title       String
-  completed   Boolean      @default(false)
-  dueDate     DateTime?
-  weddingId   String
-  completedAt DateTime?
-  createdAt   DateTime     @default(now())
-  description String?
-  priority    TaskPriority @default(MEDIUM)
-  wedding     Wedding      @relation(fields: [weddingId], references: [id])
+  id        String         @id @default(cuid())
+  name      String
+  phone     String?
+  email     String?
+  weddingId String
+  address   String?
+  createdAt DateTime       @default(now())
+  notes     String?
+  category  VendorCategory
+  wedding   Wedding        @relation(fields: [weddingId], references: [id])
 }
 
 model Document {
@@ -261,12 +276,6 @@ enum BudgetCategory {
   OTHER
 }
 
-enum TaskPriority {
-  LOW
-  MEDIUM
-  HIGH
-}
-
 enum FieldType {
   TEXT
   NUMBER
@@ -281,4 +290,24 @@ enum BudgetAddedBy {
   MUSKAN
   ANKITA
   SOURAV
+}
+
+enum TaskAddedBy {
+  SHUBHAM
+  AAKRITI
+  MUSKAN
+  ANKITA
+  SOURAV
+}
+
+enum TaskCategory {
+  GENERAL
+  VENUE
+  FOOD
+  DECOR
+  GUEST
+  TRAVEL
+  DOCUMENT
+  PAYMENT
+  OTHER
 }
