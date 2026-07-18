@@ -25,7 +25,7 @@ import {
 
 import {
   WeddingBudget,
-} from "./wedding-budget";
+} from "@/features/budget/components/wedding-budget";
 
 import {
   WeddingVendors,
@@ -49,21 +49,11 @@ interface WeddingWorkspaceProps {
     startDate: Date;
     endDate: Date | null;
     description: string | null;
-    guests: Array<{
-      id: string;
-      fullName: string;
-      phone: string | null;
-      email: string | null;
-      side: string;
-      food: string | null;
-      relation: string | null;
-      city: string | null;
-      accommodationRequired: boolean;
-      transportRequired: boolean;
-      notes: string | null;
-    }>;
+    overallBudget: number | null;
+
+    guests: any[];
     events: any[];
-    budgets: any[];
+    budgetItems: any[];
     vendors: any[];
     tasks: any[];
     documents: any[];
@@ -73,7 +63,6 @@ interface WeddingWorkspaceProps {
 export function WeddingWorkspace({
   wedding,
 }: WeddingWorkspaceProps) {
-
   const [activeTab, setActiveTab] =
     useState<WeddingTab>("Overview");
 
@@ -109,7 +98,11 @@ export function WeddingWorkspace({
       )}
 
       {activeTab === "Budget" && (
-        <WeddingBudget />
+        <WeddingBudget
+          weddingId={wedding.id}
+          overallBudget={wedding.overallBudget}
+          budgetItems={wedding.budgetItems}
+        />
       )}
 
       {activeTab === "Vendors" && (

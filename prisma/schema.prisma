@@ -18,27 +18,28 @@ model User {
 }
 
 model Wedding {
-  id           String              @id @default(cuid())
-  title        String
-  brideName    String
-  groomName    String
-  startDate    DateTime
-  endDate      DateTime?
-  ownerId      String
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  description  String?
-  location     String?
-  budgets      Budget[]
-  budgetFields BudgetCustomField[]
-  documents    Document[]
-  events       Event[]
-  families     Family[]
-  guests       Guest[]
-  guestFields  GuestCustomField[]
-  tasks        Task[]
-  vendors      Vendor[]
-  owner        User                @relation(fields: [ownerId], references: [id])
+  id            String              @id @default(cuid())
+  title         String
+  brideName     String
+  groomName     String
+  startDate     DateTime
+  endDate       DateTime?
+  ownerId       String
+  overallBudget Float?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  description   String?
+  location      String?
+  budgetItems   BudgetItem[]
+  budgetFields  BudgetCustomField[]
+  documents     Document[]
+  events        Event[]
+  families      Family[]
+  guests        Guest[]
+  guestFields   GuestCustomField[]
+  tasks         Task[]
+  vendors       Vendor[]
+  owner         User                @relation(fields: [ownerId], references: [id])
 }
 
 model Family {
@@ -79,18 +80,18 @@ model Guest {
 }
 
 model Event {
-  id String @id @default(cuid())
-  weddingId String
-  wedding Wedding @relation(fields: [weddingId], references: [id])
-  title String
-  type EventType
-  venue String?
+  id          String       @id @default(cuid())
+  weddingId   String
+  wedding     Wedding      @relation(fields: [weddingId], references: [id])
+  title       String
+  type        EventType
+  venue       String?
   description String?
-  startTime DateTime
-  endTime DateTime?
-  guests GuestEvent[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  startTime   DateTime
+  endTime     DateTime?
+  guests      GuestEvent[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model GuestEvent {
@@ -107,28 +108,20 @@ model GuestEvent {
   @@unique([guestId, eventId])
 }
 
-model Budget {
-  id        String       @id @default(cuid())
-  title     String
-  weddingId String
-  createdAt DateTime     @default(now())
-  wedding   Wedding      @relation(fields: [weddingId], references: [id])
-  items     BudgetItem[]
-}
-
 model BudgetItem {
   id           String              @id @default(cuid())
+  weddingId    String
   description  String
+  category     BudgetCategory
   estimated    Float
   actual       Float?
   paid         Float?
-  budgetId     String
+  remarks      String?
+  addedBy BudgetAddedBy @default(SHUBHAM)
   createdAt    DateTime            @default(now())
-  vendorId     String?
-  category     BudgetCategory
+  updatedAt    DateTime            @updatedAt
+  wedding      Wedding             @relation(fields: [weddingId], references: [id])
   customValues BudgetCustomValue[]
-  budget       Budget              @relation(fields: [budgetId], references: [id])
-  vendor       Vendor?             @relation(fields: [vendorId], references: [id])
 }
 
 model Vendor {
@@ -141,7 +134,6 @@ model Vendor {
   createdAt   DateTime       @default(now())
   notes       String?
   category    VendorCategory
-  budgetItems BudgetItem[]
   wedding     Wedding        @relation(fields: [weddingId], references: [id])
 }
 
@@ -281,4 +273,12 @@ enum FieldType {
   BOOLEAN
   DATE
   SELECT
+}
+
+enum BudgetAddedBy {
+  SHUBHAM
+  AAKRITI
+  MUSKAN
+  ANKITA
+  SOURAV
 }
