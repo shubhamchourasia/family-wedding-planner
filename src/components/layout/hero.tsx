@@ -34,7 +34,7 @@ const features = [
 
 export default function Hero() {
   return (
-    <main className="bg-gradient-to-br from-rose-50 via-rose-100/30 to-pink-50">
+   <main className="bg-gradient-to-br from-rose-50 via-rose-100/30 to-pink-50 pb-20">
 
       <section className="mx-auto flex min-h-[85vh] max-w-7xl flex-col items-center justify-center px-6 text-center">
 

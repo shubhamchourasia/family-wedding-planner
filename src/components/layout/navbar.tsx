@@ -34,10 +34,11 @@ export default function Navbar() {
           <Link href="/login">
             <Button
               variant="outline"
-              className="rounded-full border-rose-200 bg-rose-50 px-6 text-rose-700 hover:border-rose-300 hover:bg-rose-100"
+              className="rounded-full border-rose-200 bg-rose-50 px-6 bg-white text-rose-700 hover:border-rose-300 hover:bg-rose-100"
             >
               Login / Sign Up
             </Button>
+
           </Link>
         </div>
       </div>
