@@ -30,8 +30,8 @@ interface TaskListCardProps {
     tasks: Array<{
       id: string;
       title: string;
-      category: TaskCategory;
-      addedBy: TaskAddedBy;
+      category: string;
+      addedBy: string;
       dueDate: Date | null;
       remarks: string | null;
     }>;
@@ -148,9 +148,9 @@ export function TaskListCard({
 
 
                     <EditTaskDialog
-  weddingId={weddingId}
-  task={task}
-/>
+                      weddingId={weddingId}
+                      task={task}
+                    />
 
                   </div>
 
