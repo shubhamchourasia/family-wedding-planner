@@ -8,6 +8,11 @@ import {
   TaskListCard,
 } from "./task-list-card";
 
+import type {
+  TaskCategory,
+  TaskAddedBy,
+} from "@prisma/client";
+
 
 interface TaskDashboardProps {
   weddingId: string;
@@ -17,8 +22,8 @@ interface TaskDashboardProps {
     tasks: Array<{
       id: string;
       title: string;
-      category: string;
-      addedBy: string;
+      category: TaskCategory;
+      addedBy: TaskAddedBy;
       dueDate: Date | null;
       remarks: string | null;
     }>;
@@ -37,9 +42,7 @@ export function TaskDashboard({
       <div className="flex justify-end">
 
         <CreateTaskListDialog
-          weddingId={
-            weddingId
-          }
+          weddingId={weddingId}
         />
 
       </div>
@@ -58,15 +61,9 @@ export function TaskDashboard({
             (taskList) => (
 
               <TaskListCard
-                key={
-                  taskList.id
-                }
-                weddingId={
-                  weddingId
-                }
-                taskList={
-                  taskList
-                }
+                key={taskList.id}
+                weddingId={weddingId}
+                taskList={taskList}
               />
 
             )
