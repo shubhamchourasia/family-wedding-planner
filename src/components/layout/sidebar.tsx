@@ -22,21 +22,6 @@ export default function Sidebar() {
       {/* Logo */}
 
       <div className="flex h-20 items-center justify-between border-b px-5">
-        <div className="flex items-center gap-3 overflow-hidden">
-          <Heart className="h-8 w-8 fill-rose-700 text-rose-700 shrink-0" />
-
-          {!collapsed && (
-            <div>
-              <h2 className="font-bold text-lg leading-none">
-                Wedding Planner
-              </h2>
-
-              <p className="text-xs text-gray-500">
-                Family Workspace
-              </p>
-            </div>
-          )}
-        </div>
 
         <Button
           size="icon"
