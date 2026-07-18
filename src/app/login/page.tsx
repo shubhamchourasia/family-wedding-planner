@@ -5,13 +5,14 @@ import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
 
 export default function LoginPage() {
     return (
         <>
             <Navbar />
 
-            <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 px-6">
+            <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-br from-rose-50 via-rose-100/30 to-pink-50  px-6">
                 <div className="w-full max-w-md rounded-2xl border border-rose-100 bg-white p-8 shadow-lg">
                     {/* Logo */}
                     <div className="mb-8 flex flex-col items-center">
@@ -83,6 +84,7 @@ export default function LoginPage() {
                     </div>
                 </div>
             </main>
+             <Footer/>
         </>
     );
 }
