@@ -1,0 +1,75 @@
+import {
+  CalendarDays,
+  MapPin,
+} from "lucide-react";
+
+interface WeddingHeaderProps {
+  wedding: {
+    title: string;
+    brideName: string;
+    groomName: string;
+    location: string | null;
+    startDate: Date;
+    endDate: Date | null;
+  };
+}
+
+function formatDate(date: Date | string) {
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(date));
+}
+
+export function WeddingHeader({
+  wedding,
+}: WeddingHeaderProps) {
+
+  const dateRange = wedding.endDate
+    ? `${formatDate(wedding.startDate)} - ${formatDate(wedding.endDate)}`
+    : formatDate(wedding.startDate);
+
+  return (
+    <div className="rounded-2xl border bg-white p-8 shadow-sm">
+
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+
+        <div>
+
+          <p className="text-sm font-medium uppercase tracking-wider text-rose-600">
+            Wedding
+          </p>
+
+          <h1 className="mt-2 text-4xl font-bold">
+            {wedding.title}
+          </h1>
+
+          <p className="mt-2 text-lg text-gray-600">
+            {wedding.brideName} ❤️ {wedding.groomName}
+          </p>
+
+        </div>
+
+        <div className="space-y-3">
+
+          {wedding.location && (
+            <div className="flex items-center gap-2 text-gray-600">
+              <MapPin className="h-5 w-5 text-rose-600" />
+              <span>{wedding.location}</span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 text-gray-600">
+            <CalendarDays className="h-5 w-5 text-rose-600" />
+            <span>{dateRange}</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}

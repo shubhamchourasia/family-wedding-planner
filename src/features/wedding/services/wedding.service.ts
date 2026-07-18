@@ -3,7 +3,6 @@ import { Prisma } from "@prisma/client";
 
 import type { WeddingInput } from "../schemas/wedding.schema";
 
-
 export async function createWedding(
   data: WeddingInput,
   ownerId: string
@@ -11,24 +10,16 @@ export async function createWedding(
   return prisma.wedding.create({
     data: {
       title: data.title,
-
       brideName: data.brideName,
-
       groomName: data.groomName,
-
       startDate: data.startDate,
-
       endDate: data.endDate,
-
       location: data.location,
-
       description: data.description,
-
       ownerId,
     },
   });
 }
-
 
 export async function getWeddings(
   ownerId: string
@@ -37,34 +28,24 @@ export async function getWeddings(
     where: {
       ownerId,
     },
-
     orderBy: {
       createdAt: "desc",
     },
   });
 }
 
-
-
 const weddingDetailsArgs =
   Prisma.validator<Prisma.WeddingDefaultArgs>()({
     select: {
       id: true,
-
       title: true,
-
       brideName: true,
-
       groomName: true,
-
       startDate: true,
-
       endDate: true,
-
       location: true,
-
       description: true,
-
+      overallBudget: true,
 
       guests: {
         select: {
@@ -72,7 +53,6 @@ const weddingDetailsArgs =
           fullName: true,
         },
       },
-
 
       events: {
         select: {
@@ -84,7 +64,6 @@ const weddingDetailsArgs =
         },
       },
 
-
       vendors: {
         select: {
           id: true,
@@ -92,14 +71,22 @@ const weddingDetailsArgs =
         },
       },
 
-
-      budgets: {
+      budgetItems: {
         select: {
           id: true,
-          title: true,
+          description: true,
+          category: true,
+          estimated: true,
+          actual: true,
+          paid: true,
+          remarks: true,
+          addedBy: true,
+          createdAt: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       },
-
 
       tasks: {
         select: {
@@ -109,7 +96,6 @@ const weddingDetailsArgs =
         },
       },
 
-
       documents: {
         select: {
           id: true,
@@ -117,7 +103,6 @@ const weddingDetailsArgs =
           fileUrl: true,
         },
       },
-
 
       families: {
         select: {
@@ -128,25 +113,44 @@ const weddingDetailsArgs =
     },
   });
 
-
-
 export type WeddingDetails =
   Prisma.WeddingGetPayload<
     typeof weddingDetailsArgs
   >;
 
-
-
 export async function getWeddingById(
-  weddingId: string
-): Promise<WeddingDetails | null> {
-
+  id: string
+) {
   return prisma.wedding.findUnique({
     where: {
-      id: weddingId,
+      id,
     },
+    include: {
+      guests: {
+        orderBy: {
+          fullName: "asc",
+        },
+      },
 
-    ...weddingDetailsArgs,
+      events: {
+        orderBy: {
+          startTime: "asc",
+        },
+      },
+
+      budgetItems: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+
+      vendors: true,
+
+      tasks: true,
+
+      documents: true,
+
+      families: true,
+    },
   });
-
 }
