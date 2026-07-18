@@ -6,15 +6,6 @@ import {
 } from "react";
 
 import {
-  TaskCategory,
-  TaskAddedBy,
-} from "@prisma/client";
-
-import {
-  updateTaskAction,
-} from "../actions/update-task";
-
-import {
   Button,
 } from "@/components/ui/button";
 
@@ -33,17 +24,23 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+import {
+  updateTaskAction,
+} from "../actions/update-task";
+
+
 interface EditTaskDialogProps {
   weddingId: string;
   task: {
     id: string;
     title: string;
-    category: TaskCategory;
-    addedBy: TaskAddedBy;
+    category: string;
+    addedBy: string;
     dueDate: Date | null;
     remarks: string | null;
   };
 }
+
 
 export function EditTaskDialog({
   weddingId,
@@ -60,30 +57,24 @@ export function EditTaskDialog({
     startTransition,
   ] = useTransition();
 
-  const categories =
-    Object.values(TaskCategory);
-
-  const addedByOptions =
-    Object.values(TaskAddedBy);
 
   const [
     title,
     setTitle,
   ] = useState(task.title);
 
+
   const [
     category,
     setCategory,
-  ] = useState<TaskCategory>(
-    task.category
-  );
+  ] = useState(task.category);
+
 
   const [
     addedBy,
     setAddedBy,
-  ] = useState<TaskAddedBy>(
-    task.addedBy
-  );
+  ] = useState(task.addedBy);
+
 
   const [
     dueDate,
@@ -96,6 +87,7 @@ export function EditTaskDialog({
       : ""
   );
 
+
   const [
     remarks,
     setRemarks,
@@ -106,48 +98,44 @@ export function EditTaskDialog({
 
   function handleSubmit() {
 
-    startTransition(async () => {
+    startTransition(
+      async () => {
 
-      const result =
-        await updateTaskAction(
-          weddingId,
-          task.id,
-          {
-            title,
-            category,
-            addedBy,
-            dueDate: dueDate
-              ? new Date(dueDate)
-              : null,
-            remarks,
-          }
-        );
+        const result =
+          await updateTaskAction(
+            weddingId,
+            task.id,
+            {
+              title,
+              category,
+              addedBy,
+              dueDate: dueDate
+                ? new Date(dueDate)
+                : null,
+              remarks,
+            }
+          );
 
 
-      if (result.success) {
-
-        setOpen(false);
+        if (result.success) {
+          setOpen(false);
+        }
 
       }
-
-    });
+    );
 
   }
 
 
   return (
     <Dialog
-      open={
-        open
-      }
-      onOpenChange={
-        setOpen
-      }
+      open={open}
+      onOpenChange={setOpen}
     >
 
       <Button
-        size="sm"
         variant="outline"
+        size="sm"
         onClick={() =>
           setOpen(true)
         }
@@ -169,6 +157,7 @@ export function EditTaskDialog({
 
         <div className="space-y-4">
 
+
           <div className="space-y-2">
 
             <Label>
@@ -176,10 +165,8 @@ export function EditTaskDialog({
             </Label>
 
             <Input
-              value={
-                title
-              }
-              onChange={(e) =>
+              value={title}
+              onChange={(e)=>
                 setTitle(
                   e.target.value
                 )
@@ -195,38 +182,14 @@ export function EditTaskDialog({
               Category
             </Label>
 
-            <select
-              className="h-10 w-full rounded-md border px-3"
-              value={
-                category
-              }
-              onChange={(e) =>
+            <Input
+              value={category}
+              onChange={(e)=>
                 setCategory(
-                  e.target.value as TaskCategory
+                  e.target.value
                 )
               }
-            >
-
-              {
-                categories.map(
-                  (item) => (
-                    <option
-                      key={
-                        item
-                      }
-                      value={
-                        item
-                      }
-                    >
-                      {
-                        item
-                      }
-                    </option>
-                  )
-                )
-              }
-
-            </select>
+            />
 
           </div>
 
@@ -237,38 +200,14 @@ export function EditTaskDialog({
               Added By
             </Label>
 
-            <select
-              className="h-10 w-full rounded-md border px-3"
-              value={
-                addedBy
-              }
-              onChange={(e) =>
+            <Input
+              value={addedBy}
+              onChange={(e)=>
                 setAddedBy(
-                  e.target.value as TaskAddedBy
+                  e.target.value
                 )
               }
-            >
-
-              {
-                addedByOptions.map(
-                  (item) => (
-                    <option
-                      key={
-                        item
-                      }
-                      value={
-                        item
-                      }
-                    >
-                      {
-                        item
-                      }
-                    </option>
-                  )
-                )
-              }
-
-            </select>
+            />
 
           </div>
 
@@ -281,10 +220,8 @@ export function EditTaskDialog({
 
             <Input
               type="date"
-              value={
-                dueDate
-              }
-              onChange={(e) =>
+              value={dueDate}
+              onChange={(e)=>
                 setDueDate(
                   e.target.value
                 )
@@ -301,10 +238,8 @@ export function EditTaskDialog({
             </Label>
 
             <Input
-              value={
-                remarks
-              }
-              onChange={(e) =>
+              value={remarks}
+              onChange={(e)=>
                 setRemarks(
                   e.target.value
                 )
@@ -317,13 +252,8 @@ export function EditTaskDialog({
           <div className="flex justify-end">
 
             <Button
-              disabled={
-                pending ||
-                !title.trim()
-              }
-              onClick={
-                handleSubmit
-              }
+              disabled={pending}
+              onClick={handleSubmit}
             >
               {
                 pending
