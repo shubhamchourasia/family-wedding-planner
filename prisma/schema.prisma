@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  fullName  String
-  role      UserRole  @default(FAMILY)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  weddings  Wedding[]
+  	id         String    @id @default(cuid())
+	authId     String?    @unique
+	email      String    @unique
+	username   String?    @unique
+	fullName   String
+	role       UserRole  @default(FAMILY)
+	createdAt  DateTime  @default(now())
+	updatedAt  DateTime  @updatedAt
+    weddings   Wedding[]
 }
 
 model Wedding {
