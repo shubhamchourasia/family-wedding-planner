@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 
 import type { WeddingInput } from "../schemas/wedding.schema";
 
+
 export async function createWedding(
   data: WeddingInput,
   ownerId: string
@@ -21,6 +22,7 @@ export async function createWedding(
   });
 }
 
+
 export async function getWeddings(
   ownerId: string
 ) {
@@ -33,6 +35,7 @@ export async function getWeddings(
     },
   });
 }
+
 
 const weddingDetailsArgs =
   Prisma.validator<Prisma.WeddingDefaultArgs>()({
@@ -113,55 +116,102 @@ const weddingDetailsArgs =
     },
   });
 
+
 export type WeddingDetails =
   Prisma.WeddingGetPayload<
     typeof weddingDetailsArgs
   >;
 
+
 export async function getWeddingById(
   id: string
 ) {
+
   return prisma.wedding.findUnique({
+
     where: {
       id,
     },
+
     include: {
+
       guests: {
+
         orderBy: {
           fullName: "asc",
         },
+
+        include: {
+
+          events: {
+
+            include: {
+
+              event: {
+                select: {
+                  id: true,
+                  title: true,
+                },
+              },
+
+            },
+
+          },
+
+        },
+
       },
 
+
       events: {
+
         orderBy: {
           startTime: "asc",
         },
+
       },
 
+
       budgetItems: {
+
         orderBy: {
           createdAt: "desc",
         },
+
       },
+
 
       vendors: true,
 
+
       taskLists: {
+
         include: {
+
           tasks: {
+
             orderBy: {
               createdAt: "desc",
             },
+
           },
+
         },
+
         orderBy: {
           createdAt: "desc",
         },
+
       },
+
 
       documents: true,
 
+
       families: true,
+
     },
+
   });
+
 }

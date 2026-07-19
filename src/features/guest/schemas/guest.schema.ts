@@ -33,10 +33,14 @@ export const guestSchema = z.object({
   city: z.string().optional(),
 
   notes: z.string().optional(),
+
+  eventIds: z
+    .array(z.string())
+    .default([]),
 });
 
 export type GuestInput =
-  z.input<typeof guestSchema>;
+  z.output<typeof guestSchema>;
 
 export type GuestFormInput =
   z.output<typeof guestSchema>;

@@ -4,15 +4,38 @@ import {
   prisma,
 } from "@/lib/prisma";
 
+
 export async function getGuestsAction(
   weddingId: string
 ) {
-  return await prisma.guest.findMany({
-    where: {
-      weddingId,
-    },
-    orderBy: {
-      fullName: "asc",
-    },
-  });
+
+  const guests =
+    await prisma.guest.findMany({
+
+      where: {
+        weddingId,
+      },
+
+      include: {
+        events: {
+          include: {
+            event: {
+              select: {
+                id: true,
+                title: true,
+              },
+            },
+          },
+        },
+      },
+
+      orderBy: {
+        fullName: "asc",
+      },
+
+    });
+
+
+  return guests;
+
 }
