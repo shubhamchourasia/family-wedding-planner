@@ -28,13 +28,34 @@ export async function updateGuestAction(
 
   try {
 
+    const {
+      eventIds = [],
+      ...guestData
+    } = parsed.data;
+
     await prisma.guest.update({
 
       where: {
         id: guestId,
       },
 
-      data: parsed.data,
+      data: {
+
+        ...guestData,
+
+        events: {
+
+          deleteMany: {},
+
+          create: eventIds.map(
+            (eventId) => ({
+              eventId,
+            })
+          ),
+
+        },
+
+      },
 
     });
 

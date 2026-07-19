@@ -10,6 +10,10 @@ import {
 
 interface GuestListProps {
   weddingId: string;
+  events: Array<{
+    id: string;
+    title: string;
+  }>;
   guests: Array<{
     id: string;
     fullName: string;
@@ -22,12 +26,20 @@ interface GuestListProps {
     accommodationRequired: boolean;
     transportRequired: boolean;
     notes: string | null;
+    events?: Array<{
+      eventId: string;
+      event: {
+        id: string;
+        title: string;
+      };
+    }>;
   }>;
   onRefresh?: () => void;
 }
 
 export function GuestList({
   weddingId,
+  events,
   guests,
   onRefresh,
 }: GuestListProps) {
@@ -72,6 +84,10 @@ export function GuestList({
             </th>
 
             <th className="p-4 text-left">
+              Events
+            </th>
+
+            <th className="p-4 text-left">
               Actions
             </th>
           </tr>
@@ -110,9 +126,22 @@ export function GuestList({
               </td>
 
               <td className="p-4">
+                {guest.events &&
+                guest.events.length > 0
+                  ? guest.events
+                      .map(
+                        (guestEvent) =>
+                          guestEvent.event.title
+                      )
+                      .join(", ")
+                  : "-"}
+              </td>
+
+              <td className="p-4">
                 <div className="flex gap-2">
                   <EditGuestDialog
                     weddingId={weddingId}
+                    events={events}
                     guest={guest}
                     onSuccess={onRefresh}
                   />

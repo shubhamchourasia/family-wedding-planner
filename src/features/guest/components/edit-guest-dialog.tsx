@@ -20,6 +20,10 @@ import {
 
 interface EditGuestDialogProps {
   weddingId: string;
+  events: Array<{
+    id: string;
+    title: string;
+  }>;
   guest: {
     id: string;
     fullName: string;
@@ -30,12 +34,16 @@ interface EditGuestDialogProps {
     relation: string | null;
     city: string | null;
     notes: string | null;
+    events?: Array<{
+      eventId: string;
+    }>;
   };
   onSuccess?: () => void;
 }
 
 export function EditGuestDialog({
   weddingId,
+  events,
   guest,
   onSuccess,
 }: EditGuestDialogProps) {
@@ -82,6 +90,7 @@ export function EditGuestDialog({
 
         <GuestForm
           weddingId={weddingId}
+          events={events}
           mode="edit"
           guest={guest}
           onSuccess={handleSuccess}

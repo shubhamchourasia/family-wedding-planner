@@ -20,11 +20,16 @@ import {
 
 interface CreateGuestDialogProps {
   weddingId: string;
+  events: Array<{
+    id: string;
+    title: string;
+  }>;
   onSuccess?: () => void;
 }
 
 export function CreateGuestDialog({
   weddingId,
+  events,
   onSuccess,
 }: CreateGuestDialogProps) {
 
@@ -63,6 +68,7 @@ export function CreateGuestDialog({
 
         <GuestForm
           weddingId={weddingId}
+          events={events}
           mode="create"
           onSuccess={handleSuccess}
         />

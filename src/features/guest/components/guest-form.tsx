@@ -40,6 +40,10 @@ import {
 interface GuestFormProps {
   weddingId: string;
   mode?: "create" | "edit";
+  events: Array<{
+    id: string;
+    title: string;
+  }>;
   guest?: {
     id: string;
     fullName: string;
@@ -50,6 +54,9 @@ interface GuestFormProps {
     relation: string | null;
     city: string | null;
     notes: string | null;
+    events?: Array<{
+      eventId: string;
+    }>;
   };
   onSuccess?: () => void;
 }
@@ -61,10 +68,12 @@ const GUEST_SIDES = [
 ] as const;
 
 const FOOD_OPTIONS = [
-  "VEG"
+  "VEG",
 ] as const;
 
-function formatLabel(value: string) {
+function formatLabel(
+  value: string
+) {
   return value
     .toLowerCase()
     .split("_")
@@ -79,35 +88,69 @@ function formatLabel(value: string) {
 export function GuestForm({
   weddingId,
   mode = "create",
+  events,
   guest,
   onSuccess,
 }: GuestFormProps) {
 
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] =
+    useTransition();
 
   const form = useForm<
     GuestFormInput,
     unknown,
     GuestInput
   >({
-    resolver: zodResolver(guestSchema),
+    resolver:
+      zodResolver(
+        guestSchema
+      ) as any,
+
     defaultValues: {
-      fullName: guest?.fullName ?? "",
-      phone: guest?.phone ?? "",
-      email: guest?.email ?? "",
-      side: guest?.side ?? "BOTH",
-      food: guest?.food ?? undefined,
-      relation: guest?.relation ?? "",
-      city: guest?.city ?? "",
-      notes: guest?.notes ?? "",
+      fullName:
+        guest?.fullName ?? "",
+
+      phone:
+        guest?.phone ?? "",
+
+      email:
+        guest?.email ?? "",
+
+      side:
+        guest?.side ?? "BOTH",
+
+      food:
+        guest?.food ?? undefined,
+
+      relation:
+        guest?.relation ?? "",
+
+      city:
+        guest?.city ?? "",
+
+      notes:
+        guest?.notes ?? "",
+
+      eventIds:
+        guest?.events?.map(
+          (event) =>
+            event.eventId
+        ) ?? [],
     },
   });
 
-  function onSubmit(values: GuestInput) {
+  const selectedEvents =
+    form.watch("eventIds");
+
+  const onSubmit = (
+    values: GuestInput
+  ) => {
+
     startTransition(async () => {
 
       const result =
-        mode === "edit" && guest
+        mode === "edit" &&
+        guest
           ? await updateGuestAction(
               guest.id,
               values
@@ -118,19 +161,28 @@ export function GuestForm({
             );
 
       if (!result.success) {
-        console.error(result.error);
+
+        console.error(
+          result.error
+        );
+
         return;
+
       }
 
       form.reset();
+
       onSuccess?.();
 
     });
-  }
+
+  };
 
   return (
     <form
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(
+        onSubmit
+      )}
       className="space-y-8"
     >
       <FormSection
@@ -141,38 +193,58 @@ export function GuestForm({
           <FormField
             label="👤 Full Name"
             required
-            error={form.formState.errors.fullName?.message}
+            error={
+              form.formState.errors
+                .fullName?.message
+            }
           >
             <Input
               className="h-11"
               placeholder="Rahul Dua"
-              {...form.register("fullName")}
+              {...form.register(
+                "fullName"
+              )}
             />
           </FormField>
 
-          <FormField label="📱 Phone">
+          <FormField
+            label="📱 Phone"
+          >
             <Input
               className="h-11"
               placeholder="+91 9876543210"
-              {...form.register("phone")}
+              {...form.register(
+                "phone"
+              )}
             />
           </FormField>
 
           <FormField
             label="📧 Email"
-            error={form.formState.errors.email?.message}
+            error={
+              form.formState.errors
+                .email?.message
+            }
           >
             <Input
               className="h-11"
               placeholder="rahul@email.com"
-              {...form.register("email")}
+              {...form.register(
+                "email"
+              )}
             />
           </FormField>
 
-          <FormField label="👨‍👩‍👧 Side">
+          <FormField
+            label="👨‍👩‍👧 Side"
+          >
             <Select
-              value={form.watch("side")}
-              onValueChange={(value) =>
+              value={form.watch(
+                "side"
+              )}
+              onValueChange={(
+                value
+              ) =>
                 form.setValue(
                   "side",
                   value as GuestInput["side"],
@@ -187,19 +259,21 @@ export function GuestForm({
               </SelectTrigger>
 
               <SelectContent>
-                {GUEST_SIDES.map((side) => (
-                  <SelectItem
-                    key={side}
-                    value={side}
-                  >
-                    {formatLabel(side)}
-                  </SelectItem>
-                ))}
+                {GUEST_SIDES.map(
+                  (side) => (
+                    <SelectItem
+                      key={side}
+                      value={side}
+                    >
+                      {formatLabel(
+                        side
+                      )}
+                    </SelectItem>
+                  )
+                )}
               </SelectContent>
             </Select>
-          </FormField>
-
-          <FormField label="🥗 Food Preference">
+          </FormField>          <FormField label="🥗 Food Preference">
             <Select
               value={form.watch("food") ?? ""}
               onValueChange={(value) =>
@@ -245,6 +319,66 @@ export function GuestForm({
             />
           </FormField>
         </FormGrid>
+      </FormSection>
+
+      <FormSection
+        title="Wedding Events"
+        description="Select the events this guest is invited to."
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          {events.map((event) => {
+            const selected =
+              selectedEvents.includes(
+                event.id
+              );
+
+            return (
+              <label
+                key={event.id}
+                className="flex items-center gap-3 rounded-lg border p-3 cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  checked={selected}
+                  onChange={(e) => {
+                    const current =
+                      form.getValues(
+                        "eventIds"
+                      );
+
+                    if (e.target.checked) {
+                      form.setValue(
+                        "eventIds",
+                        [
+                          ...current,
+                          event.id,
+                        ],
+                        {
+                          shouldValidate: true,
+                        }
+                      );
+                    } else {
+                      form.setValue(
+                        "eventIds",
+                        current.filter(
+                          (id) =>
+                            id !== event.id
+                        ),
+                        {
+                          shouldValidate: true,
+                        }
+                      );
+                    }
+                  }}
+                />
+
+                <span>
+                  {event.title}
+                </span>
+              </label>
+            );
+          })}
+        </div>
       </FormSection>
 
       <FormSection

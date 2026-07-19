@@ -129,6 +129,9 @@ export function WeddingWorkspace({
             weddingId={
               wedding.id
             }
+            events={
+              wedding.events
+            }
             guests={
               wedding.guests
             }

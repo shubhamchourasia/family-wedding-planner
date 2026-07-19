@@ -1,6 +1,9 @@
 "use client";
 
-import { useTransition } from "react";
+import {
+  useState,
+  useTransition,
+} from "react";
 
 import {
   Trash2,
@@ -22,11 +25,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+
 interface DeleteGuestDialogProps {
   guestId: string;
   guestName: string;
-  onSuccess?: () => void;
+  onSuccess?: () => void | Promise<void>;
 }
+
 
 export function DeleteGuestDialog({
   guestId,
@@ -34,31 +39,50 @@ export function DeleteGuestDialog({
   onSuccess,
 }: DeleteGuestDialogProps) {
 
-  const [isPending, startTransition] =
-    useTransition();
+  const [
+    open,
+    setOpen,
+  ] = useState(false);
 
-  async function handleDelete() {
 
-    startTransition(async () => {
+  const [
+    isPending,
+    startTransition,
+  ] = useTransition();
 
-      const result =
-        await deleteGuestAction(
-          guestId
-        );
 
-      if (!result.success) {
-        console.error(result.error);
-        return;
-      }
 
-      onSuccess?.();
+  function handleDelete() {
 
-    });
+  startTransition(async () => {
 
-  }
+    const result =
+      await deleteGuestAction(
+        guestId
+      );
+
+    if (!result.success) {
+
+      console.error(
+        result.error
+      );
+
+      return;
+    }
+    setOpen(false);
+    await onSuccess?.();
+
+  });
+
+}
+
+
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+    >
 
       <DialogTrigger
         render={
@@ -75,6 +99,7 @@ export function DeleteGuestDialog({
           </button>
         }
       />
+
 
       <DialogContent
         className="max-w-md"
@@ -102,8 +127,11 @@ export function DeleteGuestDialog({
 
           <div className="flex justify-end gap-3">
 
+
             <Button
               variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={isPending}
             >
               Cancel
             </Button>
@@ -115,15 +143,19 @@ export function DeleteGuestDialog({
               onClick={handleDelete}
             >
 
-              {isPending
-                ? "Deleting..."
-                : "Delete"}
+              {
+                isPending
+                  ? "Deleting..."
+                  : "Delete"
+              }
 
             </Button>
+
 
           </div>
 
         </div>
+
 
       </DialogContent>
 
