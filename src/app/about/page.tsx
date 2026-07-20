@@ -152,7 +152,7 @@ export default function AboutPage() {
                             </strong>{" "}
                             was envisioned by{" "}
                             <strong>
-                                Aakriti Salampuri
+                                Aakriti Salampuria
                             </strong>{" "}
                             and developed by{" "}
                             <strong>
