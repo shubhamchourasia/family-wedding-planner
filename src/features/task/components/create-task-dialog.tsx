@@ -36,12 +36,15 @@ import {
 interface CreateTaskDialogProps {
   weddingId: string;
   taskListId: string;
+  onSuccess?: () => void;
 }
 
 export function CreateTaskDialog({
   weddingId,
   taskListId,
+  onSuccess,
 }: CreateTaskDialogProps) {
+
   const [open, setOpen] =
     useState(false);
 
@@ -74,7 +77,9 @@ export function CreateTaskDialog({
     useState("");
 
   function handleSubmit() {
+
     startTransition(async () => {
+
       const result =
         await createTaskAction(
           weddingId,
@@ -90,19 +95,27 @@ export function CreateTaskDialog({
           }
         );
 
-      if (result.success) {
-        setTitle("");
-        setCategory(
-          categories[0]
-        );
-        setAddedBy(
-          addedByOptions[0]
-        );
-        setDueDate("");
-        setRemarks("");
-        setOpen(false);
+      if (!result.success) {
+        console.error(result.error);
+        return;
       }
+
+      setTitle("");
+      setCategory(
+        categories[0]
+      );
+      setAddedBy(
+        addedByOptions[0]
+      );
+      setDueDate("");
+      setRemarks("");
+
+      setOpen(false);
+
+      onSuccess?.();
+
     });
+
   }
 
   return (
@@ -110,6 +123,7 @@ export function CreateTaskDialog({
       open={open}
       onOpenChange={setOpen}
     >
+
       <Button
         onClick={() =>
           setOpen(true)
@@ -119,15 +133,19 @@ export function CreateTaskDialog({
       </Button>
 
       <DialogContent>
+
         <DialogHeader>
+
           <DialogTitle>
             Add Task
           </DialogTitle>
+
         </DialogHeader>
 
         <div className="space-y-4">
 
           <div className="space-y-2">
+
             <Label>
               Task Name
             </Label>
@@ -140,9 +158,11 @@ export function CreateTaskDialog({
                 )
               }
             />
+
           </div>
 
           <div className="space-y-2">
+
             <Label>
               Category
             </Label>
@@ -169,9 +189,11 @@ export function CreateTaskDialog({
                 )
               }
             </select>
+
           </div>
 
           <div className="space-y-2">
+
             <Label>
               Added By
             </Label>
@@ -198,9 +220,11 @@ export function CreateTaskDialog({
                 )
               }
             </select>
+
           </div>
 
           <div className="space-y-2">
+
             <Label>
               Due Date
             </Label>
@@ -214,9 +238,11 @@ export function CreateTaskDialog({
                 )
               }
             />
+
           </div>
 
           <div className="space-y-2">
+
             <Label>
               Remarks
             </Label>
@@ -229,9 +255,11 @@ export function CreateTaskDialog({
                 )
               }
             />
+
           </div>
 
           <div className="flex justify-end">
+
             <Button
               disabled={
                 pending ||
@@ -247,10 +275,13 @@ export function CreateTaskDialog({
                   : "Save Task"
               }
             </Button>
+
           </div>
 
         </div>
+
       </DialogContent>
+
     </Dialog>
   );
 }

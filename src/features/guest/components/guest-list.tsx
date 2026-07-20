@@ -10,10 +10,12 @@ import {
 
 interface GuestListProps {
   weddingId: string;
+
   events: Array<{
     id: string;
     title: string;
   }>;
+
   guests: Array<{
     id: string;
     fullName: string;
@@ -26,6 +28,7 @@ interface GuestListProps {
     accommodationRequired: boolean;
     transportRequired: boolean;
     notes: string | null;
+
     events?: Array<{
       eventId: string;
       event: {
@@ -34,6 +37,7 @@ interface GuestListProps {
       };
     }>;
   }>;
+
   onRefresh?: () => void;
 }
 
@@ -59,86 +63,162 @@ export function GuestList({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-white">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+
       <table className="w-full">
-        <thead className="border-b bg-gray-50">
-          <tr>
-            <th className="p-4 text-left">
-              Name
+
+        <thead className="border-b bg-gradient-to-r from-gray-50 to-gray-100">
+
+          <tr className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+
+            <th className="px-6 py-4 text-left">
+              Guest
             </th>
 
-            <th className="p-4 text-left">
+            <th className="px-6 py-4 text-left">
               Phone
             </th>
 
-            <th className="p-4 text-left">
+            <th className="px-6 py-4 text-left">
               Side
             </th>
 
-            <th className="p-4 text-left">
+            <th className="px-6 py-4 text-left">
               Food
             </th>
 
-            <th className="p-4 text-left">
+            <th className="px-6 py-4 text-left">
               City
             </th>
 
-            <th className="p-4 text-left">
+            <th className="px-6 py-4 text-left">
               Events
             </th>
 
-            <th className="p-4 text-left">
+            <th className="px-6 py-4 text-center">
               Actions
             </th>
+
           </tr>
+
         </thead>
 
         <tbody>
+
           {guests.map((guest) => (
+
             <tr
               key={guest.id}
-              className="border-b hover:bg-gray-50"
+              className="
+                border-b
+                border-gray-100
+                transition-colors
+                hover:bg-gray-50/70
+              "
             >
-              <td className="p-4">
-                <div className="font-medium">
+
+              <td className="px-6 py-5">
+
+                <div className="font-semibold text-gray-900">
                   {guest.fullName}
                 </div>
 
-                <div className="text-sm text-gray-500">
-                  {guest.relation || "-"}
+                <div className="mt-1 text-sm text-gray-500">
+                  {guest.relation || "No relation"}
                 </div>
+
               </td>
 
-              <td className="p-4">
+              <td className="px-6 py-5 text-gray-700">
                 {guest.phone || "-"}
               </td>
 
-              <td className="p-4">
-                {guest.side}
+              <td className="px-6 py-5">
+
+                <span
+                  className="
+                    inline-flex
+                    rounded-full
+                    bg-blue-50
+                    px-3
+                    py-1
+                    text-xs
+                    font-medium
+                    text-blue-700
+                  "
+                >
+                  {guest.side}
+                </span>
+
               </td>
 
-              <td className="p-4">
-                {guest.food || "-"}
+              <td className="px-6 py-5">
+
+                <span
+                  className="
+                    inline-flex
+                    rounded-full
+                    bg-green-50
+                    px-3
+                    py-1
+                    text-xs
+                    font-medium
+                    text-green-700
+                  "
+                >
+                  {guest.food || "-"}
+                </span>
+
               </td>
 
-              <td className="p-4">
+              <td className="px-6 py-5 text-gray-700">
                 {guest.city || "-"}
               </td>
 
-              <td className="p-4">
-                {guest.events &&
-                guest.events.length > 0
-                  ? guest.events
-                      .map(
-                        (guestEvent) =>
-                          guestEvent.event.title
+              <td className="px-6 py-5">
+
+                <div className="flex flex-wrap gap-2">
+
+                  {guest.events &&
+                  guest.events.length > 0 ? (
+
+                    guest.events.map(
+                      (guestEvent) => (
+
+                        <span
+                          key={guestEvent.eventId}
+                          className="
+                            rounded-full
+                            bg-purple-50
+                            px-3
+                            py-1
+                            text-xs
+                            font-medium
+                            text-purple-700
+                          "
+                        >
+                          {guestEvent.event.title}
+                        </span>
+
                       )
-                      .join(", ")
-                  : "-"}
+                    )
+
+                  ) : (
+
+                    <span className="text-gray-400">
+                      -
+                    </span>
+
+                  )}
+
+                </div>
+
               </td>
 
-              <td className="p-4">
-                <div className="flex gap-2">
+              <td className="px-6 py-5">
+
+                <div className="flex justify-center gap-2">
+
                   <EditGuestDialog
                     weddingId={weddingId}
                     events={events}
@@ -151,12 +231,19 @@ export function GuestList({
                     guestName={guest.fullName}
                     onSuccess={onRefresh}
                   />
+
                 </div>
+
               </td>
+
             </tr>
+
           ))}
+
         </tbody>
+
       </table>
+
     </div>
   );
 }

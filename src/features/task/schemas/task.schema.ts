@@ -34,6 +34,7 @@ export const taskSchema =
       "DOCUMENT",
       "PAYMENT",
       "OTHER",
+      "GENERAL",
     ]),
 
     addedBy: z.enum([

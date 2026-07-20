@@ -1,4 +1,6 @@
-import { EventCard } from "./event-card";
+import {
+  EventCard,
+} from "./event-card";
 
 interface EventGridProps {
   weddingId: string;
@@ -18,6 +20,7 @@ export function EventGrid({
   weddingId,
   events,
 }: EventGridProps) {
+
   if (events.length === 0) {
     return (
       <div
@@ -36,19 +39,33 @@ export function EventGrid({
         <p className="mt-2 text-gray-500">
           Create your first wedding event.
         </p>
+
       </div>
     );
   }
 
   return (
-    <div className="grid gap-5">
-      {events.map((event) => (
-        <EventCard
-          key={event.id}
-          weddingId={weddingId}
-          event={event}
-        />
-      ))}
+    <div
+      className="
+        grid
+        grid-cols-1
+        gap-6
+        md:grid-cols-2
+      "
+    >
+
+      {events.map(
+        (event) => (
+
+          <EventCard
+            key={event.id}
+            weddingId={weddingId}
+            event={event}
+          />
+
+        )
+      )}
+
     </div>
   );
 }

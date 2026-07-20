@@ -6,6 +6,12 @@ import {
 } from "react";
 
 import {
+  Search,
+  CalendarDays,
+  Users,
+} from "lucide-react";
+
+import {
   GuestList,
 } from "@/features/guest/components/guest-list";
 
@@ -25,6 +31,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  Input,
+} from "@/components/ui/input";
 
 interface WeddingGuestsProps {
   weddingId: string;
@@ -46,7 +55,6 @@ interface WeddingGuestsProps {
     accommodationRequired: boolean;
     transportRequired: boolean;
     notes: string | null;
-
     events?: Array<{
       eventId: string;
       event: {
@@ -56,7 +64,6 @@ interface WeddingGuestsProps {
     }>;
   }>;
 }
-
 
 export function WeddingGuests({
   weddingId,
@@ -69,49 +76,90 @@ export function WeddingGuests({
     setGuests,
   ] = useState(initialGuests);
 
-
   const [
     selectedEvent,
     setSelectedEvent,
-  ] = useState<string>("ALL");
+  ] = useState("ALL");
 
+  const [
+    selectedSide,
+    setSelectedSide,
+  ] = useState("ALL");
+
+  const [
+    search,
+    setSearch,
+  ] = useState("");
 
   async function refreshGuests() {
 
-  const updatedGuests =
-    await getGuestsAction(
-      weddingId
-    );
-  setGuests([
-    ...updatedGuests,
-  ]);
+    const updatedGuests =
+      await getGuestsAction(
+        weddingId
+      );
 
-}
+    setGuests(updatedGuests);
 
+  }
 
   const filteredGuests =
     useMemo(() => {
 
-      if (
-        selectedEvent === "ALL"
-      ) {
-        return guests;
-      }
-
-
       return guests.filter(
-        (guest) =>
-          guest.events?.some(
-            (guestEvent) =>
-              guestEvent.eventId === selectedEvent
-          )
+        (guest) => {
+
+          const matchesEvent =
+            selectedEvent === "ALL"
+              ? true
+              : guest.events?.some(
+                  (guestEvent) =>
+                    guestEvent.eventId === selectedEvent
+                );
+
+          const matchesSide =
+            selectedSide === "ALL"
+              ? true
+              : selectedSide === "BRIDE"
+                ? guest.side === "BRIDE" ||
+                  guest.side === "BOTH"
+                : selectedSide === "GROOM"
+                  ? guest.side === "GROOM" ||
+                    guest.side === "BOTH"
+                  : guest.side === "BOTH";
+
+          const keyword =
+            search.toLowerCase();
+
+          const matchesSearch =
+            keyword.length === 0 ||
+            guest.fullName
+              .toLowerCase()
+              .includes(keyword) ||
+            guest.phone
+              ?.toLowerCase()
+              .includes(keyword) ||
+            guest.city
+              ?.toLowerCase()
+              .includes(keyword) ||
+            guest.relation
+              ?.toLowerCase()
+              .includes(keyword);
+
+          return (
+            matchesEvent &&
+            matchesSide &&
+            matchesSearch
+          );
+
+        }
       );
 
     }, [
       guests,
       selectedEvent,
+      selectedSide,
+      search,
     ]);
-
 
   const selectedEventTitle =
     selectedEvent === "ALL"
@@ -119,16 +167,15 @@ export function WeddingGuests({
       : events.find(
           (event) =>
             event.id === selectedEvent
-        )?.title ?? "Select Event";
-
+        )?.title ?? "All Events";
 
   return (
     <div className="space-y-6">
 
-
       <div className="flex items-center justify-between">
 
         <div>
+
           <h2 className="text-2xl font-semibold">
             Guests
           </h2>
@@ -136,8 +183,8 @@ export function WeddingGuests({
           <p className="text-gray-500">
             Manage wedding invitations and guest details.
           </p>
-        </div>
 
+        </div>
 
         <CreateGuestDialog
           weddingId={weddingId}
@@ -147,67 +194,138 @@ export function WeddingGuests({
 
       </div>
 
+      <div className="rounded-xl border bg-white p-4 shadow-sm">
 
-      <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
 
-        <Select
-          value={selectedEvent}
-          onValueChange={(value) => {
-            setSelectedEvent(
-              value ?? "ALL"
-            );
-          }}
-        >
+          <div className="relative flex-1 min-w-[260px]">
 
-          <SelectTrigger className="w-64">
+            <Search
+              className="
+                absolute
+                left-3
+                top-1/2
+                h-4
+                w-4
+                -translate-y-1/2
+                text-gray-400
+              "
+            />
 
-            <SelectValue>
-              {selectedEventTitle}
-            </SelectValue>
+            <Input
+              placeholder="Search guests..."
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              className="pl-10"
+            />
 
-          </SelectTrigger>
+          </div>
 
+          <div className="flex items-center gap-2">
 
-          <SelectContent>
+            <CalendarDays className="h-4 w-4 text-gray-500" />
 
-            <SelectItem value="ALL">
-              All Events
-            </SelectItem>
+            <Select
+              value={selectedEvent}
+              onValueChange={(value) =>
+                setSelectedEvent(
+                  value ?? "ALL"
+                )
+              }
+            >
 
+              <SelectTrigger className="w-56">
+                <SelectValue>
+                  {selectedEventTitle}
+                </SelectValue>
+              </SelectTrigger>
 
-            {events.map(
-              (event) => (
+              <SelectContent>
 
-                <SelectItem
-                  key={event.id}
-                  value={event.id}
-                >
-                  {event.title}
+                <SelectItem value="ALL">
+                  All Events
                 </SelectItem>
 
-              )
-            )}
+                {events.map(
+                  (event) => (
 
-          </SelectContent>
+                    <SelectItem
+                      key={event.id}
+                      value={event.id}
+                    >
+                      {event.title}
+                    </SelectItem>
 
-        </Select>
+                  )
+                )}
 
+              </SelectContent>
 
-        <span className="text-sm text-gray-500">
+            </Select>
 
-          Showing{" "}
-          <b>
-            {filteredGuests.length}
-          </b>
-          {" "}of{" "}
-          <b>
-            {guests.length}
-          </b>
+          </div>
 
-        </span>
+          <div className="flex items-center gap-2">
+
+            <Users className="h-4 w-4 text-gray-500" />
+
+            <Select
+              value={selectedSide}
+              onValueChange={(value) =>
+                setSelectedSide(
+                  value ?? "ALL"
+                )
+              }
+            >
+
+              <SelectTrigger className="w-44">
+                <SelectValue />
+              </SelectTrigger>
+
+              <SelectContent>
+
+                <SelectItem value="ALL">
+                  All Sides
+                </SelectItem>
+
+                <SelectItem value="BRIDE">
+                  Bride
+                </SelectItem>
+
+                <SelectItem value="GROOM">
+                  Groom
+                </SelectItem>
+
+                <SelectItem value="BOTH">
+                  Both
+                </SelectItem>
+
+              </SelectContent>
+
+            </Select>
+
+          </div>
+
+          <div className="ml-auto rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600">
+
+            Showing{" "}
+            <span className="font-semibold">
+              {filteredGuests.length}
+            </span>
+            {" "}of{" "}
+            <span className="font-semibold">
+              {guests.length}
+            </span>
+
+          </div>
+
+        </div>
 
       </div>
-
 
       <GuestList
         weddingId={weddingId}
@@ -215,7 +333,6 @@ export function WeddingGuests({
         guests={filteredGuests}
         onRefresh={refreshGuests}
       />
-
 
     </div>
   );
