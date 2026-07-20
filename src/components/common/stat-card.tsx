@@ -1,12 +1,9 @@
 "use client";
 
-import type {
+import {
   LucideIcon,
 } from "lucide-react";
 
-import {
-  Currency,
-} from "./currency";
 
 interface StatCardProps {
   title: string;
@@ -14,51 +11,96 @@ interface StatCardProps {
   icon: LucideIcon;
   color?: string;
   subtitle?: string;
-  isCurrency?: boolean;
 }
+
 
 export function StatCard({
   title,
   value,
   icon: Icon,
-  color = "text-blue-600",
+  color = "text-amber-700",
   subtitle,
-  isCurrency = true,
 }: StatCardProps) {
+
   return (
-    <div className="rounded-xl border bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+    <div
+      className="
+        rounded-2xl
+        border
+        border-amber-100
+        workspace-card
+        p-5
+        shadow-sm
+        transition-all
+        duration-200
+        hover:-translate-y-1
+        hover:shadow-md
+      "
+    >
 
       <div className="flex items-center justify-between">
 
         <div>
 
-          <p className="text-sm text-gray-500">
+          <p
+            className="
+              text-sm
+              font-semibold
+              uppercase
+              tracking-wide
+              text-stone-500
+            "
+          >
             {title}
           </p>
 
-          <div className="mt-2 text-2xl font-bold">
 
-            {isCurrency ? (
-              <Currency value={value} />
-            ) : (
-              value.toLocaleString("en-IN")
-            )}
+          <p
+            className="
+              mt-2
+              text-2xl
+              font-bold
+              text-stone-900
+            "
+          >
+            ₹{value.toLocaleString("en-IN")}
+          </p>
 
-          </div>
 
           {subtitle && (
-            <p className="mt-2 text-xs text-gray-500">
+            <p
+              className="
+                mt-1
+                text-xs
+                font-medium
+                text-stone-500
+              "
+            >
               {subtitle}
             </p>
           )}
 
         </div>
 
+
         <div
-          className={`rounded-lg bg-gray-100 p-3 ${color}`}
+          className="
+            flex
+            h-12
+            w-12
+            items-center
+            justify-center
+            rounded-xl
+            bg-amber-50
+          "
         >
-          <Icon className="h-6 w-6" />
+
+          <Icon
+            className={`h-6 w-6 ${color}`}
+          />
+
         </div>
+
 
       </div>
 

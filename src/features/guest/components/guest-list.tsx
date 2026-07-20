@@ -50,12 +50,12 @@ export function GuestList({
 
   if (guests.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed p-10 text-center">
-        <h3 className="text-xl font-semibold">
+      <div className="rounded-xl border border-dashed border-amber-200 p-10 text-center">
+        <h3 className="text-xl font-semibold text-stone-800">
           No Guests Added
         </h3>
 
-        <p className="mt-2 text-gray-500">
+        <p className="mt-2 text-stone-500">
           Add your first wedding guest.
         </p>
       </div>
@@ -63,13 +63,13 @@ export function GuestList({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div className="rounded-2xl border border-amber-100 workspace-card overflow-hidden shadow-sm">
 
       <table className="w-full">
 
-        <thead className="border-b bg-gradient-to-r from-gray-50 to-gray-100">
+        <thead className="border-b border-amber-200 bg-gradient-to-r from-[#fff8e7] via-amber-50 to-[#fffdf8]">
 
-          <tr className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+          <tr className="text-sm font-bold uppercase tracking-wide text-stone-600">
 
             <th className="px-6 py-4 text-left">
               Guest
@@ -103,6 +103,7 @@ export function GuestList({
 
         </thead>
 
+
         <tbody>
 
           {guests.map((guest) => (
@@ -111,27 +112,29 @@ export function GuestList({
               key={guest.id}
               className="
                 border-b
-                border-gray-100
+                border-amber-100/70
                 transition-colors
-                hover:bg-gray-50/70
+                hover:bg-amber-50/50
               "
             >
 
               <td className="px-6 py-5">
 
-                <div className="font-semibold text-gray-900">
+                <div className="font-semibold text-stone-900">
                   {guest.fullName}
                 </div>
 
-                <div className="mt-1 text-sm text-gray-500">
+                <div className="mt-1 text-sm text-stone-500">
                   {guest.relation || "No relation"}
                 </div>
 
               </td>
 
-              <td className="px-6 py-5 text-gray-700">
+
+              <td className="px-6 py-5 text-base text-stone-700">
                 {guest.phone || "-"}
               </td>
+
 
               <td className="px-6 py-5">
 
@@ -139,12 +142,14 @@ export function GuestList({
                   className="
                     inline-flex
                     rounded-full
-                    bg-blue-50
+                    border
+                    border-amber-100
+                    bg-amber-50
                     px-3
                     py-1
                     text-xs
                     font-medium
-                    text-blue-700
+                    text-amber-800
                   "
                 >
                   {guest.side}
@@ -152,18 +157,21 @@ export function GuestList({
 
               </td>
 
+
               <td className="px-6 py-5">
 
                 <span
                   className="
                     inline-flex
                     rounded-full
-                    bg-green-50
+                    border
+                    border-emerald-100
+                    bg-emerald-50
                     px-3
                     py-1
                     text-xs
                     font-medium
-                    text-green-700
+                    text-emerald-700
                   "
                 >
                   {guest.food || "-"}
@@ -171,9 +179,11 @@ export function GuestList({
 
               </td>
 
-              <td className="px-6 py-5 text-gray-700">
+
+              <td className="px-6 py-5 text-base text-stone-700">
                 {guest.city || "-"}
               </td>
+
 
               <td className="px-6 py-5">
 
@@ -189,12 +199,14 @@ export function GuestList({
                           key={guestEvent.eventId}
                           className="
                             rounded-full
-                            bg-purple-50
+                            border
+                            border-rose-100
+                            bg-rose-50
                             px-3
                             py-1
                             text-xs
                             font-medium
-                            text-purple-700
+                            text-rose-700
                           "
                         >
                           {guestEvent.event.title}
@@ -205,7 +217,7 @@ export function GuestList({
 
                   ) : (
 
-                    <span className="text-gray-400">
+                    <span className="text-stone-400">
                       -
                     </span>
 
@@ -214,6 +226,7 @@ export function GuestList({
                 </div>
 
               </td>
+
 
               <td className="px-6 py-5">
 
@@ -225,6 +238,7 @@ export function GuestList({
                     guest={guest}
                     onSuccess={onRefresh}
                   />
+
 
                   <DeleteGuestDialog
                     guestId={guest.id}

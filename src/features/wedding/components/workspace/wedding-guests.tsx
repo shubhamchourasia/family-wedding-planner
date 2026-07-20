@@ -35,6 +35,7 @@ import {
   Input,
 } from "@/components/ui/input";
 
+
 interface WeddingGuestsProps {
   weddingId: string;
 
@@ -65,6 +66,7 @@ interface WeddingGuestsProps {
   }>;
 }
 
+
 export function WeddingGuests({
   weddingId,
   events,
@@ -76,20 +78,24 @@ export function WeddingGuests({
     setGuests,
   ] = useState(initialGuests);
 
+
   const [
     selectedEvent,
     setSelectedEvent,
   ] = useState("ALL");
+
 
   const [
     selectedSide,
     setSelectedSide,
   ] = useState("ALL");
 
+
   const [
     search,
     setSearch,
   ] = useState("");
+
 
   async function refreshGuests() {
 
@@ -101,6 +107,7 @@ export function WeddingGuests({
     setGuests(updatedGuests);
 
   }
+
 
   const filteredGuests =
     useMemo(() => {
@@ -116,6 +123,7 @@ export function WeddingGuests({
                     guestEvent.eventId === selectedEvent
                 );
 
+
           const matchesSide =
             selectedSide === "ALL"
               ? true
@@ -127,8 +135,10 @@ export function WeddingGuests({
                     guest.side === "BOTH"
                   : guest.side === "BOTH";
 
+
           const keyword =
             search.toLowerCase();
+
 
           const matchesSearch =
             keyword.length === 0 ||
@@ -145,6 +155,7 @@ export function WeddingGuests({
               ?.toLowerCase()
               .includes(keyword);
 
+
           return (
             matchesEvent &&
             matchesSide &&
@@ -154,12 +165,14 @@ export function WeddingGuests({
         }
       );
 
-    }, [
+
+    },[
       guests,
       selectedEvent,
       selectedSide,
       search,
     ]);
+
 
   const selectedEventTitle =
     selectedEvent === "ALL"
@@ -169,22 +182,30 @@ export function WeddingGuests({
             event.id === selectedEvent
         )?.title ?? "All Events";
 
+
   return (
+
     <div className="space-y-6">
+
+
+      {/* Header */}
 
       <div className="flex items-center justify-between">
 
         <div>
 
-          <h2 className="text-2xl font-semibold">
-            Guests
+          <div>
+          <h2 className="pl-2 text-2xl font-semibold text-stone-900">
+            Guest Management
           </h2>
 
-          <p className="text-gray-500">
+          <p className="pl-2 text-gray-500">
             Manage wedding invitations and guest details.
           </p>
+        </div>
 
         </div>
+
 
         <CreateGuestDialog
           weddingId={weddingId}
@@ -194,11 +215,27 @@ export function WeddingGuests({
 
       </div>
 
-      <div className="rounded-xl border bg-white p-4 shadow-sm">
+
+
+      {/* Filters */}
+
+      <div
+        className="
+          rounded-2xl
+          border
+          border-amber-100
+          workspace-card
+          p-5
+          shadow-sm
+        "
+      >
 
         <div className="flex flex-wrap items-center gap-4">
 
-          <div className="relative flex-1 min-w-[260px]">
+
+          {/* Search */}
+
+          <div className="relative min-w-[260px] flex-1">
 
             <Search
               className="
@@ -208,41 +245,75 @@ export function WeddingGuests({
                 h-4
                 w-4
                 -translate-y-1/2
-                text-gray-400
+                text-amber-600
               "
             />
+
 
             <Input
               placeholder="Search guests..."
               value={search}
-              onChange={(e) =>
+              onChange={(e)=>
                 setSearch(
                   e.target.value
                 )
               }
-              className="pl-10"
+              className="
+                h-11
+                rounded-xl
+                border-amber-200
+                bg-[#fffdf8]
+                pl-10
+                text-stone-700
+                placeholder:text-stone-400
+                focus-visible:ring-amber-300
+              "
             />
 
           </div>
 
+
+
+          {/* Event Filter */}
+
           <div className="flex items-center gap-2">
 
-            <CalendarDays className="h-4 w-4 text-gray-500" />
+            <CalendarDays
+              className="
+                h-5
+                w-5
+                text-amber-700
+              "
+            />
+
 
             <Select
               value={selectedEvent}
-              onValueChange={(value) =>
+              onValueChange={(value)=>
                 setSelectedEvent(
                   value ?? "ALL"
                 )
               }
             >
 
-              <SelectTrigger className="w-56">
+              <SelectTrigger
+                className="
+                  h-11
+                  w-56
+                  rounded-xl
+                  border-amber-200
+                  bg-[#fffdf8]
+                  text-stone-700
+                  focus:ring-amber-300
+                "
+              >
+
                 <SelectValue>
                   {selectedEventTitle}
                 </SelectValue>
+
               </SelectTrigger>
+
 
               <SelectContent>
 
@@ -250,41 +321,71 @@ export function WeddingGuests({
                   All Events
                 </SelectItem>
 
-                {events.map(
-                  (event) => (
 
-                    <SelectItem
-                      key={event.id}
-                      value={event.id}
-                    >
-                      {event.title}
-                    </SelectItem>
+                {
+                  events.map(
+                    (event)=>(
 
+                      <SelectItem
+                        key={event.id}
+                        value={event.id}
+                      >
+                        {event.title}
+                      </SelectItem>
+
+                    )
                   )
-                )}
+                }
 
               </SelectContent>
 
+
             </Select>
+
 
           </div>
 
+
+
+          {/* Side Filter */}
+
           <div className="flex items-center gap-2">
 
-            <Users className="h-4 w-4 text-gray-500" />
+
+            <Users
+              className="
+                h-5
+                w-5
+                text-amber-700
+              "
+            />
+
 
             <Select
               value={selectedSide}
-              onValueChange={(value) =>
+              onValueChange={(value)=>
                 setSelectedSide(
                   value ?? "ALL"
                 )
               }
             >
 
-              <SelectTrigger className="w-44">
+              <SelectTrigger
+                className="
+                  h-11
+                  w-44
+                  rounded-xl
+                  border-amber-200
+                  bg-[#fffdf8]
+                  text-stone-700
+                  focus:ring-amber-300
+                "
+              >
+
                 <SelectValue />
+
               </SelectTrigger>
+
 
               <SelectContent>
 
@@ -308,24 +409,47 @@ export function WeddingGuests({
 
             </Select>
 
+
           </div>
 
-          <div className="ml-auto rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600">
+
+
+          {/* Count */}
+
+          <div
+            className="
+              ml-auto
+              rounded-full
+              border
+              border-amber-200
+              bg-amber-50
+              px-5
+              py-2.5
+              text-sm
+              font-medium
+              text-amber-800
+            "
+          >
 
             Showing{" "}
-            <span className="font-semibold">
+            <span className="font-bold">
               {filteredGuests.length}
             </span>
+
             {" "}of{" "}
-            <span className="font-semibold">
+
+            <span className="font-bold">
               {guests.length}
             </span>
 
           </div>
 
+
         </div>
 
       </div>
+
+
 
       <GuestList
         weddingId={weddingId}
@@ -334,6 +458,9 @@ export function WeddingGuests({
         onRefresh={refreshGuests}
       />
 
+
     </div>
+
   );
+
 }

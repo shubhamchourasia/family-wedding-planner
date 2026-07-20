@@ -43,13 +43,24 @@ export function TaskDashboard({
     <div className="space-y-6">
 
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between px-2">
 
-        <CreateTaskListDialog
-          weddingId={weddingId}
-        />
+      <div>
+        <h2 className="pl-2 text-2xl font-bold text-stone-900">
+          Task Management
+        </h2>
 
+        <p className="pl-2 text-gray-500">
+          Manage wedding tasks, responsibilities and progress.
+        </p>
       </div>
+
+
+      <CreateTaskListDialog
+        weddingId={weddingId}
+      />
+
+    </div>
 
 
 

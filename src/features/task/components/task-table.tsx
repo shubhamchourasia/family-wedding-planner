@@ -22,6 +22,7 @@ import type {
   TaskAddedBy,
 } from "@prisma/client";
 
+
 interface TaskTableProps {
   weddingId: string;
 
@@ -38,6 +39,7 @@ interface TaskTableProps {
   onRefresh?: () => void;
 }
 
+
 function formatDate(
   date: Date | null
 ) {
@@ -46,9 +48,7 @@ function formatDate(
     return "-";
   }
 
-  return new Date(
-    date
-  ).toLocaleDateString(
+  return new Date(date).toLocaleDateString(
     "en-IN",
     {
       day: "2-digit",
@@ -59,11 +59,13 @@ function formatDate(
 
 }
 
+
 export function TaskTable({
   weddingId,
   tasks,
   onRefresh,
 }: TaskTableProps) {
+
 
   async function handleToggle(
     taskId: string
@@ -75,69 +77,78 @@ export function TaskTable({
         taskId
       );
 
-    if (
-      result.success
-    ) {
+
+    if (result.success) {
       onRefresh?.();
     }
 
   }
 
-  if (
-    tasks.length === 0
-  ) {
+
+  if (tasks.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed p-10 text-center text-gray-500">
+      <div className="rounded-xl border border-dashed border-amber-200 p-10 text-center text-stone-500">
         No tasks added yet.
       </div>
     );
   }
 
+
   return (
 
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-amber-100 workspace-card shadow-sm">
 
       <div className="overflow-x-auto">
 
         <table className="min-w-full">
 
-          <thead className="sticky top-0 border-b bg-gray-50">
 
-            <tr className="text-xs uppercase tracking-wider text-gray-500">
+          <thead className="border-b border-amber-200 bg-gradient-to-r from-[#fff8e7] via-amber-50 to-[#fffdf8]">
 
-              <th className="px-6 py-4 text-left font-semibold">
+            <tr className="text-sm font-bold uppercase tracking-wide text-stone-600">
+
+              <th className="px-6 py-4 text-left">
                 Status
               </th>
 
-              <th className="px-6 py-4 text-left font-semibold">
+
+              <th className="px-6 py-4 text-left">
                 Task
               </th>
 
-              <th className="px-6 py-4 text-left font-semibold">
+
+              <th className="px-6 py-4 text-left">
                 Category
               </th>
 
-              <th className="px-6 py-4 text-left font-semibold">
+
+              <th className="px-6 py-4 text-left">
                 Due Date
               </th>
 
-              <th className="px-6 py-4 text-left font-semibold">
+
+              <th className="px-6 py-4 text-left">
                 Added By
               </th>
 
-              <th className="px-6 py-4 text-left font-semibold">
+
+              <th className="px-6 py-4 text-left">
                 Remarks
               </th>
 
-              <th className="px-6 py-4 text-center font-semibold">
+
+              <th className="px-6 py-4 text-center">
                 Actions
               </th>
+
 
             </tr>
 
           </thead>
 
+
           <tbody>
+
 
             {tasks.map(
               (task) => (
@@ -146,19 +157,18 @@ export function TaskTable({
                   key={task.id}
                   className="
                     border-b
-                    even:bg-gray-50/40
-                    hover:bg-blue-50/40
+                    border-amber-100/70
                     transition-colors
+                    hover:bg-amber-50/50
                   "
                 >
 
-                  <td className="px-6 py-4">
+
+                  <td className="px-6 py-5">
 
                     <button
                       onClick={() =>
-                        handleToggle(
-                          task.id
-                        )
+                        handleToggle(task.id)
                       }
                       className={`
                         inline-flex
@@ -174,8 +184,8 @@ export function TaskTable({
                         hover:shadow-md
                         ${
                           task.completed
-                            ? "border-green-200 bg-green-50 text-green-700"
-                            : "border-blue-200 bg-blue-50 text-blue-700"
+                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                            : "border-amber-200 bg-amber-50 text-amber-800"
                         }
                       `}
                     >
@@ -196,49 +206,77 @@ export function TaskTable({
 
                   </td>
 
-                  <td className="px-6 py-4">
 
-                    <div className="font-semibold text-gray-900">
+                  <td className="px-6 py-5">
+
+                    <div className="font-semibold text-stone-900">
                       {task.title}
                     </div>
 
                   </td>
 
-                  <td className="px-6 py-4">
 
-                    <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
+                  <td className="px-6 py-5">
+
+                    <span
+                      className="
+                        inline-flex
+                        rounded-full
+                        border
+                        border-purple-100
+                        bg-purple-50
+                        px-3
+                        py-1
+                        text-xs
+                        font-medium
+                        text-purple-700
+                      "
+                    >
                       {task.category}
                     </span>
 
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-600">
 
-                    {formatDate(
-                      task.dueDate
-                    )}
+                  <td className="px-6 py-5 whitespace-nowrap text-base text-stone-700">
+
+                    {formatDate(task.dueDate)}
 
                   </td>
 
-                  <td className="px-6 py-4">
 
-                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                  <td className="px-6 py-5">
+
+                    <span
+                      className="
+                        inline-flex
+                        rounded-full
+                        border
+                        border-amber-200
+                        bg-amber-50
+                        px-3
+                        py-1
+                        text-xs
+                        font-medium
+                        text-amber-800
+                      "
+                    >
                       {task.addedBy}
                     </span>
 
                   </td>
 
-                  <td className="max-w-sm px-6 py-4 text-gray-600">
+
+                  <td className="max-w-sm px-6 py-5 text-base text-stone-600">
 
                     <div className="truncate">
-
                       {task.remarks || "-"}
-
                     </div>
 
                   </td>
 
-                  <td className="px-6 py-4">
+
+                  <td className="px-6 py-5">
 
                     <div className="flex justify-center gap-2">
 
@@ -247,6 +285,7 @@ export function TaskTable({
                         task={task}
                         onSuccess={onRefresh}
                       />
+
 
                       <DeleteTaskDialog
                         weddingId={weddingId}
@@ -259,12 +298,15 @@ export function TaskTable({
 
                   </td>
 
+
                 </tr>
 
               )
             )}
 
+
           </tbody>
+
 
         </table>
 

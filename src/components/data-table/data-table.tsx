@@ -137,7 +137,16 @@ export function DataTable<TData, TValue>({
   if (loading) {
 
     return (
-      <div className="rounded-xl border bg-white p-8">
+      <div
+        className="
+          rounded-2xl
+          border
+          border-amber-100
+          workspace-card
+          p-6
+          shadow-sm
+        "
+      >
         Loading...
       </div>
     );
@@ -186,11 +195,27 @@ export function DataTable<TData, TValue>({
 
           <>
 
-            <div className="rounded-xl border">
+            <div
+              className="
+                overflow-hidden
+                rounded-2xl
+                border
+                border-amber-100
+                workspace-card
+                shadow-sm
+              "
+            >
 
               <Table>
 
-                <TableHeader>
+                <TableHeader
+                  className="
+                    bg-gradient-to-r
+                    from-[#fff8e7]
+                    via-amber-50
+                    to-[#fffdf8]
+                  "
+                >
 
                   {
                     table.getHeaderGroups().map(
@@ -202,6 +227,10 @@ export function DataTable<TData, TValue>({
                           key={
                             group.id
                           }
+                          className="
+                            border-b
+                            border-amber-100
+                          "
                         >
 
                           {
@@ -214,6 +243,15 @@ export function DataTable<TData, TValue>({
                                   key={
                                     header.id
                                   }
+                                  className="
+                                    px-6
+                                    py-4
+                                    text-sm
+                                    font-bold
+                                    uppercase
+                                    tracking-wide
+                                    text-stone-600
+                                  "
                                 >
 
                                   {
@@ -253,6 +291,12 @@ export function DataTable<TData, TValue>({
                           key={
                             row.id
                           }
+                          className="
+                            border-b
+                            border-amber-50
+                            transition-colors
+                            hover:bg-amber-50/40
+                          "
                         >
 
                           {
@@ -265,6 +309,11 @@ export function DataTable<TData, TValue>({
                                   key={
                                     cell.id
                                   }
+                                  className="
+                                    px-6
+                                    py-5
+                                    text-stone-700
+                                  "
                                 >
 
                                   {
@@ -288,6 +337,7 @@ export function DataTable<TData, TValue>({
 
                 </TableBody>
 
+
               </Table>
 
             </div>
@@ -295,7 +345,7 @@ export function DataTable<TData, TValue>({
 
             <div className="flex items-center justify-between">
 
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm font-medium text-stone-500">
 
                 Showing {
                   table.getRowModel().rows.length
@@ -317,6 +367,12 @@ export function DataTable<TData, TValue>({
                   onClick={
                     () => table.previousPage()
                   }
+                  className="
+                    border-amber-200
+                    bg-amber-50
+                    text-amber-700
+                    hover:bg-amber-100
+                  "
                 >
                   Previous
                 </Button>
@@ -331,6 +387,12 @@ export function DataTable<TData, TValue>({
                   onClick={
                     () => table.nextPage()
                   }
+                  className="
+                    border-amber-200
+                    bg-amber-50
+                    text-amber-700
+                    hover:bg-amber-100
+                  "
                 >
                   Next
                 </Button>
@@ -346,5 +408,4 @@ export function DataTable<TData, TValue>({
 
     </div>
   );
-
 }

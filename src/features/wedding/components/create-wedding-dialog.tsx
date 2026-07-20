@@ -28,7 +28,19 @@ export function CreateWeddingDialog() {
 
       <DialogTrigger
         render={
-          <Button type="button">
+          <Button
+              size="lg"
+              variant="outline"
+              className="
+                rounded-full
+                border-amber-300
+                bg-amber-50
+                px-8
+                text-amber-800
+                hover:bg-amber-100
+                hover:text-amber-900
+              "
+            >
             Create Wedding
           </Button>
         }

@@ -120,135 +120,151 @@ export function WeddingWorkspace({
   );
 
 
-  return (
+    return (
 
-    <div className="space-y-6">
+    <div
+      className="
+        relative
+        min-h-screen
+        overflow-hidden
+      "
+    >
 
-
-      <WeddingHeader
-        wedding={wedding}
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[url('/images/wedding-bg.jpg')]
+          bg-cover
+          bg-center
+          opacity-70
+        "
       />
 
-
-
-      <WeddingTabs
-        activeTab={activeTab}
-        onChange={setActiveTab}
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[#faf7f2]/70
+        "
       />
 
+      <div
+        className="
+          relative
+          z-10
+          space-y-6
+        "
+      >
 
+        <WeddingHeader
+          wedding={wedding}
+        />
 
-      {
-        activeTab === "Overview" && (
+        <WeddingTabs
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
 
-          <WeddingOverview
-            wedding={wedding}
-          />
+        {
+          activeTab === "Overview" && (
 
-        )
-      }
+            <WeddingOverview
+              wedding={wedding}
+            />
 
+          )
+        }
 
+        {
+          activeTab === "Events" && (
 
-      {
-        activeTab === "Events" && (
+            <WeddingEvents
+              wedding={wedding}
+            />
 
-          <WeddingEvents
-            wedding={wedding}
-          />
+          )
+        }
 
-        )
-      }
+        {
+          activeTab === "Guests" && (
 
+            <WeddingGuests
 
+              weddingId={
+                wedding.id
+              }
 
-      {
-        activeTab === "Guests" && (
+              events={
+                wedding.events
+              }
 
-          <WeddingGuests
+              guests={
+                wedding.guests
+              }
 
-            weddingId={
-              wedding.id
-            }
+            />
 
-            events={
-              wedding.events
-            }
+          )
+        }
 
-            guests={
-              wedding.guests
-            }
+        {
+          activeTab === "Budget" && (
 
-          />
+            <WeddingBudget
 
-        )
-      }
+              weddingId={
+                wedding.id
+              }
 
+              overallBudget={
+                wedding.overallBudget
+              }
 
+              budgetItems={
+                wedding.budgetItems
+              }
 
-      {
-        activeTab === "Budget" && (
+            />
 
-          <WeddingBudget
+          )
+        }
 
-            weddingId={
-              wedding.id
-            }
+        {
+          activeTab === "Vendors" && (
 
-            overallBudget={
-              wedding.overallBudget
-            }
+            <WeddingVendors />
 
-            budgetItems={
-              wedding.budgetItems
-            }
+          )
+        }
 
-          />
+        {
+          activeTab === "Tasks" && (
 
-        )
-      }
+            <TaskDashboard
 
+              weddingId={
+                wedding.id
+              }
 
+              taskLists={
+                wedding.taskLists
+              }
 
-      {
-        activeTab === "Vendors" && (
+            />
 
-          <WeddingVendors />
+          )
+        }
 
-        )
-      }
+        {
+          activeTab === "Documents" && (
 
+            <WeddingDocuments />
 
+          )
+        }
 
-      {
-        activeTab === "Tasks" && (
-
-          <TaskDashboard
-
-            weddingId={
-              wedding.id
-            }
-
-            taskLists={
-              wedding.taskLists
-            }
-
-          />
-
-        )
-      }
-
-
-
-      {
-        activeTab === "Documents" && (
-
-          <WeddingDocuments />
-
-        )
-      }
-
-
+      </div>
 
     </div>
 

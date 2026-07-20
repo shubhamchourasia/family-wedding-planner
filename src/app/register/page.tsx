@@ -81,12 +81,12 @@ export default function RegisterPage() {
     <>
       <Navbar />
 
-      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-br from-rose-50 via-rose-100/30 to-pink-50 px-6 py-12">
-        <div className="w-full max-w-md rounded-2xl border border-rose-100 bg-white px-8 py-5 shadow-lg">
+      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gradient-to-br from-amber-50 via-[#fff9ed] to-stone-50 px-6 py-12">
+        <div className="w-full max-w-md rounded-2xl border border-amber-100 bg-[#fffdf8] px-8 py-5 shadow-lg">
           {/* Logo */}
           <div className="mb-8 flex flex-col items-center">
-            <div className="mb-4 rounded-full bg-rose-100 p-4">
-              <Heart className="h-8 w-8 fill-rose-700 text-rose-700" />
+            <div className="mb-4 rounded-full bg-amber-100 p-4">
+              <Heart className="h-8 w-8 fill-amber-700 text-amber-700" />
             </div>
 
             <p className="mt-2 text-center text-sm text-gray-500">
@@ -106,7 +106,7 @@ export default function RegisterPage() {
                 placeholder="Enter your full name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="border-rose-200 focus-visible:ring-rose-300"
+                className="border-amber-200 focus-visible:ring-amber-300"
               />
             </div>
 
@@ -119,7 +119,7 @@ export default function RegisterPage() {
                 placeholder="Choose a username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="border-rose-200 focus-visible:ring-rose-300"
+                className="border-amber-200 focus-visible:ring-amber-300"
               />
             </div>
 
@@ -132,7 +132,7 @@ export default function RegisterPage() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-rose-200 focus-visible:ring-rose-300"
+                className="border-amber-200 focus-visible:ring-amber-300"
               />
             </div>
 
@@ -145,7 +145,7 @@ export default function RegisterPage() {
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="border-rose-200 focus-visible:ring-rose-300"
+                className="border-amber-200 focus-visible:ring-amber-300"
               />
             </div>
 
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="border-rose-200 focus-visible:ring-rose-300"
+                className="border-amber-200 focus-visible:ring-amber-300"
               />
             </div>
 
@@ -167,12 +167,11 @@ export default function RegisterPage() {
                 {error}
               </div>
             )}
-            
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:border-rose-300 hover:text-rose-800 shadow-sm transition-all hover:border-rose-300 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 hover:border-amber-300 hover:text-amber-900 shadow-sm transition-all disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </Button>
@@ -180,9 +179,11 @@ export default function RegisterPage() {
 
           {/* Divider */}
           <div className="my-8 flex items-center">
-            <div className="h-px flex-1 bg-rose-200" />
-            <span className="mx-4 text-sm text-gray-400">OR</span>
-            <div className="h-px flex-1 bg-rose-200" />
+            <div className="h-px flex-1 bg-amber-200" />
+            <span className="mx-4 text-sm text-gray-400">
+              OR
+            </span>
+            <div className="h-px flex-1 bg-amber-200" />
           </div>
 
           {/* Login */}
@@ -190,13 +191,14 @@ export default function RegisterPage() {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-semibold text-rose-700 transition-colors hover:text-rose-800 hover:underline"
+              className="font-semibold text-amber-700 transition-colors hover:text-amber-900 hover:underline"
             >
               Login
             </Link>
           </p>
         </div>
       </main>
+
       <Footer />
     </>
   );

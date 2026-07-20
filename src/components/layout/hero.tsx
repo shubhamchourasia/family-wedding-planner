@@ -34,21 +34,21 @@ const features = [
 
 export default function Hero() {
   return (
-   <main className="bg-gradient-to-br from-rose-50 via-rose-100/30 to-pink-50 pb-20">
+    <main className="bg-gradient-to-br from-amber-50 via-[#fff9ed] to-stone-50 pb-20">
 
-      <section className="mx-auto flex min-h-[85vh] max-w-7xl flex-col items-center justify-center px-6 text-center">
+      <section className="mx-auto flex min-h-[55vh] max-w-7xl flex-col items-center justify-center px-6 pt-16 pb-10 text-center">
 
         <p className="mb-4 text-7xl">
           💍
         </p>
 
 
-        <h1 className="max-w-4xl text-6xl font-bold leading-tight">
+        <h1 className="max-w-4xl text-6xl font-bold leading-tight text-amber-950">
           Plan Your Family Wedding Beautifully
         </h1>
 
 
-        <p className="mt-6 max-w-2xl text-lg text-gray-600">
+        <p className="mt-6 max-w-2xl text-lg text-stone-600">
           A modern wedding planner built for Indian families to manage guests,
           budgets, vendors, accommodation, transportation and every ceremony
           from one place.
@@ -65,6 +65,15 @@ export default function Hero() {
             <Button
               size="lg"
               variant="outline"
+              className="
+                rounded-full
+                border-amber-300
+                bg-amber-50
+                px-8
+                text-amber-800
+                hover:bg-amber-100
+                hover:text-amber-900
+              "
             >
               View Weddings
             </Button>
@@ -76,9 +85,9 @@ export default function Hero() {
       </section>
 
 
-      <section className="mx-auto mb-20 max-w-7xl px-6">
+      <section className="mx-auto max-w-7xl px-6 pb-20">
 
-        <h2 className="mb-12 text-center text-4xl font-bold">
+        <h2 className="mb-12 text-center text-4xl font-bold text-amber-950">
           Everything you need
         </h2>
 
@@ -92,7 +101,8 @@ export default function Hero() {
               className="
                 rounded-2xl
                 border
-                bg-white
+                border-amber-100
+                bg-[#fffdf8]
                 p-8
                 shadow-sm
                 transition
@@ -101,15 +111,15 @@ export default function Hero() {
               "
             >
 
-              <item.icon className="mb-4 h-10 w-10 text-rose-700" />
+              <item.icon className="mb-4 h-10 w-10 text-amber-700" />
 
 
-              <h3 className="mb-3 text-xl font-semibold">
+              <h3 className="mb-3 text-xl font-semibold text-stone-800">
                 {item.title}
               </h3>
 
 
-              <p className="text-gray-600">
+              <p className="text-stone-600">
                 Easily organize and manage your wedding planning.
               </p>
 

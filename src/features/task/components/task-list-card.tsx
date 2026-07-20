@@ -21,6 +21,7 @@ import {
   TaskTable,
 } from "./task-table";
 
+
 interface TaskListCardProps {
   weddingId: string;
 
@@ -42,6 +43,7 @@ interface TaskListCardProps {
   onRefresh?: () => void;
 }
 
+
 export function TaskListCard({
   weddingId,
   taskList,
@@ -49,21 +51,33 @@ export function TaskListCard({
 }: TaskListCardProps) {
 
   return (
-    <div className="rounded-xl border bg-white p-6 space-y-5">
+    <div
+      className="
+        rounded-2xl
+        border
+        border-amber-100
+        workspace-card
+        p-4
+        space-y-4
+        shadow-sm
+      "
+    >
 
       <div className="flex items-center justify-between">
 
         <div>
 
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-lg font-bold text-stone-900">
             {taskList.name}
           </h3>
 
-          <p className="text-sm text-muted-foreground">
+
+          <p className="mt-1 text-sm font-medium text-stone-500">
             {taskList.tasks.length} tasks
           </p>
 
         </div>
+
 
         <div className="flex gap-2">
 
@@ -71,6 +85,7 @@ export function TaskListCard({
             weddingId={weddingId}
             taskList={taskList}
           />
+
 
           <DeleteTaskListDialog
             weddingId={weddingId}
@@ -81,11 +96,13 @@ export function TaskListCard({
 
       </div>
 
+
       <TaskTable
         weddingId={weddingId}
         tasks={taskList.tasks}
         onRefresh={onRefresh}
       />
+
 
       <div className="flex justify-end">
 
@@ -96,6 +113,7 @@ export function TaskListCard({
         />
 
       </div>
+
 
     </div>
   );
