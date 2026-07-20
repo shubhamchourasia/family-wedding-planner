@@ -53,13 +53,21 @@ interface WeddingWorkspaceProps {
   wedding: {
 
     id: string;
+
     title: string;
+
     brideName: string;
+
     groomName: string;
+
     location: string | null;
+
     startDate: Date;
+
     endDate: Date | null;
+
     description: string | null;
+
     overallBudget: number | null;
 
 
@@ -120,7 +128,7 @@ export function WeddingWorkspace({
   );
 
 
-    return (
+  return (
 
     <div
       className="
@@ -130,41 +138,58 @@ export function WeddingWorkspace({
       "
     >
 
-      <div
-        className="
-          absolute
-          inset-0
-          bg-[url('/images/wedding-bg.jpg')]
-          bg-cover
-          bg-center
-          opacity-70
-        "
-      />
+      {/* Background Image */}
 
       <div
         className="
           absolute
           inset-0
-          bg-[#faf7f2]/70
+          bg-cover
+          bg-center
+          bg-no-repeat
+        "
+        style={{
+          backgroundImage:
+            "url('/images/wedding-bg.jpg')",
+        }}
+      />
+
+
+      {/* Background Overlay */}
+
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[#faf7f2]/65
         "
       />
+
+
+      {/* Workspace Content */}
 
       <div
         className="
           relative
           z-10
           space-y-6
+          px-4
+          py-6
         "
       >
+
 
         <WeddingHeader
           wedding={wedding}
         />
 
+
         <WeddingTabs
           activeTab={activeTab}
           onChange={setActiveTab}
         />
+
+
 
         {
           activeTab === "Overview" && (
@@ -176,6 +201,8 @@ export function WeddingWorkspace({
           )
         }
 
+
+
         {
           activeTab === "Events" && (
 
@@ -185,6 +212,8 @@ export function WeddingWorkspace({
 
           )
         }
+
+
 
         {
           activeTab === "Guests" && (
@@ -208,6 +237,8 @@ export function WeddingWorkspace({
           )
         }
 
+
+
         {
           activeTab === "Budget" && (
 
@@ -230,6 +261,8 @@ export function WeddingWorkspace({
           )
         }
 
+
+
         {
           activeTab === "Vendors" && (
 
@@ -237,6 +270,8 @@ export function WeddingWorkspace({
 
           )
         }
+
+
 
         {
           activeTab === "Tasks" && (
@@ -256,6 +291,8 @@ export function WeddingWorkspace({
           )
         }
 
+
+
         {
           activeTab === "Documents" && (
 
@@ -264,7 +301,9 @@ export function WeddingWorkspace({
           )
         }
 
+
       </div>
+
 
     </div>
 
