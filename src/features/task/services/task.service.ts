@@ -50,13 +50,25 @@ export async function getTaskListsByWedding(
     where: {
       weddingId,
     },
+
     include: {
       tasks: {
+        select: {
+          id: true,
+          title: true,
+          category: true,
+          addedBy: true,
+          dueDate: true,
+          completed: true,
+          remarks: true,
+        },
+
         orderBy: {
           createdAt: "desc",
         },
       },
     },
+
     orderBy: {
       createdAt: "asc",
     },

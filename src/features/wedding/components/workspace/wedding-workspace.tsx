@@ -9,6 +9,7 @@ import type {
   TaskAddedBy,
 } from "@prisma/client";
 
+
 import {
   WeddingHeader,
 } from "./wedding-header";
@@ -48,7 +49,9 @@ import {
 
 
 interface WeddingWorkspaceProps {
+
   wedding: {
+
     id: string;
     title: string;
     brideName: string;
@@ -59,44 +62,73 @@ interface WeddingWorkspaceProps {
     description: string | null;
     overallBudget: number | null;
 
+
     guests: any[];
+
     events: any[];
+
     budgetItems: any[];
+
     vendors: any[];
+
     documents: any[];
 
+
     taskLists: Array<{
+
       id: string;
+
       name: string;
+
+
       tasks: Array<{
+
         id: string;
+
         title: string;
-        category: string;
-        addedBy: string;
+
+        category: TaskCategory;
+
+        addedBy: TaskAddedBy;
+
         dueDate: Date | null;
+
+        completed: boolean;
+
         remarks: string | null;
+
       }>;
+
     }>;
+
   };
+
 }
+
 
 
 export function WeddingWorkspace({
   wedding,
 }: WeddingWorkspaceProps) {
 
+
   const [
     activeTab,
     setActiveTab,
-  ] = useState<WeddingTab>("Overview");
+  ] = useState<WeddingTab>(
+    "Overview"
+  );
 
 
   return (
+
     <div className="space-y-6">
+
 
       <WeddingHeader
         wedding={wedding}
       />
+
 
 
       <WeddingTabs
@@ -105,85 +137,121 @@ export function WeddingWorkspace({
       />
 
 
+
       {
         activeTab === "Overview" && (
+
           <WeddingOverview
             wedding={wedding}
           />
+
         )
       }
+
 
 
       {
         activeTab === "Events" && (
+
           <WeddingEvents
             wedding={wedding}
           />
+
         )
       }
+
 
 
       {
         activeTab === "Guests" && (
+
           <WeddingGuests
+
             weddingId={
               wedding.id
             }
+
             events={
               wedding.events
             }
+
             guests={
               wedding.guests
             }
+
           />
+
         )
       }
+
 
 
       {
         activeTab === "Budget" && (
+
           <WeddingBudget
+
             weddingId={
               wedding.id
             }
+
             overallBudget={
               wedding.overallBudget
             }
+
             budgetItems={
               wedding.budgetItems
             }
+
           />
+
         )
       }
+
 
 
       {
         activeTab === "Vendors" && (
+
           <WeddingVendors />
+
         )
       }
+
 
 
       {
         activeTab === "Tasks" && (
+
           <TaskDashboard
+
             weddingId={
               wedding.id
             }
+
             taskLists={
               wedding.taskLists
             }
+
           />
+
         )
       }
+
 
 
       {
         activeTab === "Documents" && (
+
           <WeddingDocuments />
+
         )
       }
 
+
+
     </div>
+
   );
+
 }
