@@ -35,9 +35,15 @@ export async function updateEvent(
     data: {
       title: data.title,
       type: data.type,
-      venue: data.venue,
-      startTime: data.startTime,
-      endTime: data.endTime,
+      venue: data.venue || null,
+      description:
+        data.description || null,
+      startTime: new Date(
+        data.startTime
+      ),
+      endTime: data.endTime
+        ? new Date(data.endTime)
+        : null,
     },
   });
 }

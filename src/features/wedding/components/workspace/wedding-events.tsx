@@ -22,10 +22,15 @@ export function WeddingEvents({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">
-          Events
+        <div>
+        <h2 className="pl-2  text-2xl font-semibold text-stone-900">
+          Event Management
         </h2>
 
+        <p className="pl-2 text-gray-500">
+          Manage events and schedules.
+        </p>
+      </div>
         <CreateEventDialog weddingId={wedding.id} />
       </div>
 

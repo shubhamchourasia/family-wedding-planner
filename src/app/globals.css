@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf7f2;
-  --foreground: #1f2937;
+  --background: #fffaf0;
+  --foreground: #292524;
 
-  --card: #ffffff;
-  --card-foreground: #1f2937;
+  --card: #fffdf8;
+  --card-foreground: #292524;
 
-  --popover: #ffffff;
-  --popover-foreground: #1f2937;
+  --popover: #fffdf8;
+  --popover-foreground: #292524;
 
-  --primary: #7f1d1d;
+  --primary: #b7791f;
   --primary-foreground: #ffffff;
 
-  --secondary: #f4e4bc;
-  --secondary-foreground: #4b2e0f;
+  --secondary: #fef3c7;
+  --secondary-foreground: #78350f;
 
   --muted: #f5f5f4;
-  --muted-foreground: #6b7280;
+  --muted-foreground: #78716c;
 
-  --accent: #fff7ed;
-  --accent-foreground: #7f1d1d;
+  --accent: #fffbeb;
+  --accent-foreground: #92400e;
 
-  --border: #eadfcf;
-  --input: #eadfcf;
+  --border: #ead9b8;
+  --input: #ead9b8;
 
-  --ring: #7f1d1d;
+  --ring: #d97706;
 
   --radius: 0.75rem;
 }
@@ -52,4 +52,10 @@ textarea {
 
 a {
   transition: all 0.2s;
+}
+
+.workspace-card {
+  background-color: rgba(255, 253, 248, 0.75);
+  backdrop-filter: blur(12px);
+  border-color: rgba(234, 217, 184, 0.8);
 }

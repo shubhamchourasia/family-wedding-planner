@@ -24,7 +24,7 @@ export function WeddingTabs({
   return (
     <div className="overflow-x-auto">
 
-      <div className="flex gap-2 rounded-xl border bg-white p-2">
+      <div className="flex gap-2 rounded-xl border border-amber-100 bg-[#fffdf8] p-2">
 
         {tabs.map((tab) => (
 
@@ -33,8 +33,8 @@ export function WeddingTabs({
             onClick={() => onChange(tab)}
             className={
               activeTab === tab
-                ? "rounded-lg bg-rose-700 px-5 py-2 text-white transition"
-                : "rounded-lg px-5 py-2 text-gray-600 transition hover:bg-gray-100"
+                ? "rounded-lg bg-amber-700 px-5 py-2 text-white shadow-sm transition"
+                : "rounded-lg px-5 py-2 text-stone-600 transition hover:bg-amber-50 hover:text-amber-800"
             }
           >
             {tab}
