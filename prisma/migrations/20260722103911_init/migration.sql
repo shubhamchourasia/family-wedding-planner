@@ -34,7 +34,9 @@ CREATE TYPE "TaskCategory" AS ENUM ('GENERAL', 'VENUE', 'FOOD', 'DECOR', 'GUEST'
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "authId" TEXT,
     "email" TEXT NOT NULL,
+    "username" TEXT,
     "fullName" TEXT NOT NULL,
     "role" "UserRole" NOT NULL DEFAULT 'FAMILY',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -50,7 +52,6 @@ CREATE TABLE "Wedding" (
     "brideName" TEXT NOT NULL,
     "groomName" TEXT NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
-    "endDate" TIMESTAMP(3),
     "ownerId" TEXT NOT NULL,
     "overallBudget" DOUBLE PRECISION,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -240,7 +241,13 @@ CREATE TABLE "BudgetCustomValue" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_authId_key" ON "User"("authId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "GuestEvent_guestId_eventId_key" ON "GuestEvent"("guestId", "eventId");

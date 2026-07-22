@@ -1,4 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import {
+  PrismaClient,
+  UserRole,
+} from "@prisma/client";
 
 
 const prisma = new PrismaClient();
@@ -9,44 +12,46 @@ async function main() {
   await prisma.user.upsert({
 
     where: {
-      email: "demo@wedding.com",
+      email: "admin@test.com",
     },
-
 
     update: {},
 
-
     create: {
-      id: "development-user-id",
 
-      email: "demo@wedding.com",
+      email: "admin@test.com",
 
-      fullName: "Demo User",
+      fullName:
+        "Shubham Chourasia",
 
-      role: "ADMIN",
+      username:
+        "shubham",
+
+      role:
+        UserRole.ADMIN,
+
     },
 
   });
 
 
   console.log(
-    "Development user created"
+    "Seed completed"
   );
 
 }
 
 
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
+  .catch((e)=>{
 
-  .catch(async (error) => {
-
-    console.error(error);
-
-    await prisma.$disconnect();
+    console.error(e);
 
     process.exit(1);
+
+  })
+  .finally(async()=>{
+
+    await prisma.$disconnect();
 
   });
