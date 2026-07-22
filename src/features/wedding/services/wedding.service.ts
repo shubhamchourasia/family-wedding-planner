@@ -14,7 +14,6 @@ export async function createWedding(
       brideName: data.brideName,
       groomName: data.groomName,
       startDate: data.startDate,
-      endDate: data.endDate,
       location: data.location,
       description: data.description,
       ownerId,
@@ -45,7 +44,6 @@ const weddingDetailsArgs =
       brideName: true,
       groomName: true,
       startDate: true,
-      endDate: true,
       location: true,
       description: true,
       overallBudget: true,
@@ -122,6 +120,24 @@ export type WeddingDetails =
     typeof weddingDetailsArgs
   >;
 
+export async function updateWedding(
+  id: string,
+  data: WeddingInput
+) {
+  return prisma.wedding.update({
+    where: {
+      id,
+    },
+    data: {
+      title: data.title,
+      brideName: data.brideName,
+      groomName: data.groomName,
+      startDate: data.startDate,
+      location: data.location,
+      description: data.description,
+    },
+  });
+}
 
 export async function getWeddingById(
   id: string

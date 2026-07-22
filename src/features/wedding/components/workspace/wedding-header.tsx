@@ -10,7 +10,6 @@ interface WeddingHeaderProps {
     groomName: string;
     location: string | null;
     startDate: Date;
-    endDate: Date | null;
   };
 }
 
@@ -27,9 +26,7 @@ export function WeddingHeader({
   wedding,
 }: WeddingHeaderProps) {
 
-  const dateRange = wedding.endDate
-    ? `${formatDate(wedding.startDate)} - ${formatDate(wedding.endDate)}`
-    : formatDate(wedding.startDate);
+  const dateRange = formatDate(wedding.startDate);
 
   return (
     <div className="rounded-2xl border border-amber-100 bg-[#fffdf8] p-8 shadow-sm">

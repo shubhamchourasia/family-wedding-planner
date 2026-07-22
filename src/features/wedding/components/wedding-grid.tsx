@@ -2,7 +2,6 @@ import {
   WeddingCard,
 } from "./wedding-card";
 
-
 interface WeddingGridProps {
 
   weddings: Array<{
@@ -11,16 +10,15 @@ interface WeddingGridProps {
     brideName: string;
     groomName: string;
     startDate: Date;
-    location?: string | null;
+    location: string | null;
+    description: string | null;
   }>;
 
 }
 
-
 export function WeddingGrid({
   weddings,
 }: WeddingGridProps) {
-
 
   if (weddings.length === 0) {
 
@@ -28,11 +26,11 @@ export function WeddingGrid({
 
       <div
         className="
-        rounded-2xl
-        border
-        bg-white
-        p-10
-        text-center
+          rounded-2xl
+          border
+          bg-white
+          p-10
+          text-center
         "
       >
 
@@ -40,11 +38,9 @@ export function WeddingGrid({
           No weddings yet
         </h3>
 
-
         <p className="mt-2 text-gray-500">
           Create your first wedding to start planning.
         </p>
-
 
       </div>
 
@@ -52,30 +48,28 @@ export function WeddingGrid({
 
   }
 
-
   return (
 
     <div
       className="
-      grid
-      gap-6
-      md:grid-cols-2
-      lg:grid-cols-3
+        grid
+        gap-6
+        md:grid-cols-2
+        lg:grid-cols-3
       "
     >
 
-      {
-        weddings.map((wedding) => (
+      {weddings.map((wedding) => (
 
-          <WeddingCard
-            key={wedding.id}
-            wedding={wedding}
-          />
+        <WeddingCard
+          key={wedding.id}
+          wedding={wedding}
+        />
 
-        ))
-      }
+      ))}
 
     </div>
 
   );
+
 }
