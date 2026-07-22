@@ -1,7 +1,11 @@
+"use client";
+
 import {
   CalendarDays,
   Clock3,
   MapPin,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 
 import {
@@ -25,6 +29,8 @@ interface EventCardProps {
     startTime: Date;
     endTime: Date | null;
   };
+
+  onRefresh?: () => void | Promise<void>;
 }
 
 
@@ -61,6 +67,7 @@ function formatTime(
 export function EventCard({
   weddingId,
   event,
+  onRefresh,
 }: EventCardProps) {
 
   return (
@@ -70,8 +77,8 @@ export function EventCard({
         border
         border-amber-100
         workspace-card
-        p-4
-        space-y-4
+        p-5
+        space-y-5
         shadow-sm
         transition
         hover:shadow-md
@@ -102,10 +109,11 @@ export function EventCard({
               text-amber-700
             "
           >
-            {event.type.replace("_", " ")}
+            {event.type.replaceAll("_", " ")}
           </span>
 
         </div>
+
 
 
         <div className="flex gap-2">
@@ -113,12 +121,13 @@ export function EventCard({
           <EditEventDialog
             weddingId={weddingId}
             event={event}
+            onSuccess={onRefresh}
           />
-
 
           <DeleteEventDialog
             weddingId={weddingId}
             eventId={event.id}
+            onSuccess={onRefresh}
           />
 
         </div>
@@ -126,62 +135,77 @@ export function EventCard({
       </div>
 
 
+
       <div className="space-y-3">
+
 
         <div className="flex items-center gap-3 text-stone-600">
 
           <CalendarDays className="h-4 w-4 text-amber-700" />
 
-          <span className="text-sm font-medium">
+          <span className="text-sm">
             {formatDate(event.startTime)}
           </span>
 
         </div>
 
 
+
         <div className="flex items-center gap-3 text-stone-600">
 
           <Clock3 className="h-4 w-4 text-amber-700" />
 
-          <span className="text-sm font-medium">
+          <span className="text-sm">
             {formatTime(event.startTime)}
           </span>
 
         </div>
 
 
-        {event.venue && (
-          <div className="flex items-center gap-3 text-stone-600">
 
-            <MapPin className="h-4 w-4 text-amber-700" />
+        {
+          event.venue && (
 
-            <span className="text-sm font-medium">
-              {event.venue}
-            </span>
+            <div className="flex items-center gap-3 text-stone-600">
 
-          </div>
-        )}
+              <MapPin className="h-4 w-4 text-amber-700" />
+
+              <span className="text-sm">
+                {event.venue}
+              </span>
+
+            </div>
+
+          )
+        }
+
 
       </div>
 
 
-      {event.description && (
 
-        <div
-          className="
-            border-t
-            border-amber-100
-            pt-3
-          "
-        >
+      {
+        event.description && (
 
-          <p className="text-sm leading-6 text-stone-600">
-            {event.description}
-          </p>
+          <div
+            className="
+              rounded-xl
+              bg-amber-50/60
+              p-3
+              border
+              border-amber-100
+            "
+          >
 
-        </div>
+            <p className="text-sm leading-6 text-stone-600">
+              {event.description}
+            </p>
 
-      )}
+          </div>
+
+        )
+      }
+
 
     </div>
   );

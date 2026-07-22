@@ -88,23 +88,16 @@ export function useWeddingTabData(
 
           case "Guests": {
 
-
-            if(data.guests.length)
-              break;
-
-
             const guests =
               await getGuestsAction(
                 weddingId
               );
 
 
-            setData(
-              previous => ({
-                ...previous,
-                guests,
-              })
-            );
+            setData(previous => ({
+              ...previous,
+              guests,
+            }));
 
 
             break;
@@ -116,10 +109,6 @@ export function useWeddingTabData(
           case "Events": {
 
 
-            if(data.events.length)
-              break;
-
-
             const result =
               await getEventsAction(
                 weddingId
@@ -128,13 +117,11 @@ export function useWeddingTabData(
 
             if(result.success) {
 
-              setData(
-                previous => ({
-                  ...previous,
-                  events:
-                    result.data ?? [],
-                })
-              );
+              setData(previous => ({
+                ...previous,
+                events:
+                  result.data ?? [],
+              }));
 
             }
 
@@ -148,10 +135,6 @@ export function useWeddingTabData(
           case "Budget": {
 
 
-            if(data.budgetItems.length)
-              break;
-
-
             const result =
               await getBudgetItemsAction(
                 weddingId
@@ -160,15 +143,11 @@ export function useWeddingTabData(
 
             if(result.success) {
 
-              setData(
-                previous => ({
-                  ...previous,
-
-                  budgetItems:
-                    result.data ?? [],
-
-                })
-              );
+              setData(previous => ({
+                ...previous,
+                budgetItems:
+                  result.data ?? [],
+              }));
 
             }
 
@@ -182,10 +161,6 @@ export function useWeddingTabData(
           case "Tasks": {
 
 
-            if(data.taskLists.length)
-              break;
-
-
             const result =
               await getTaskListsAction(
                 weddingId
@@ -194,15 +169,11 @@ export function useWeddingTabData(
 
             if(result.success) {
 
-              setData(
-                previous => ({
-                  ...previous,
-
-                  taskLists:
-                    result.data ?? [],
-
-                })
-              );
+              setData(previous => ({
+                ...previous,
+                taskLists:
+                  result.data ?? [],
+              }));
 
             }
 
@@ -212,20 +183,12 @@ export function useWeddingTabData(
           }
 
 
-
-          default:
-
-            break;
-
-
         }
 
 
       } finally {
 
-
         setLoading(false);
-
 
       }
 
@@ -234,10 +197,24 @@ export function useWeddingTabData(
 
     [
       weddingId,
-      data.guests.length,
-      data.events.length,
-      data.budgetItems.length,
-      data.taskLists.length,
+    ]
+
+  );
+
+
+
+  const refreshTab = useCallback(
+
+    async (
+      tab: string
+    ) => {
+
+      await loadTab(tab);
+
+    },
+
+    [
+      loadTab,
     ]
 
   );
@@ -251,6 +228,8 @@ export function useWeddingTabData(
     loading,
 
     loadTab,
+
+    refreshTab,
 
   };
 

@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useState,
+} from "react";
+
 
 import {
   Pencil,
 } from "lucide-react";
+
 
 import {
   Dialog,
@@ -14,56 +18,84 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+
 import {
   TaskForm,
 } from "./task-form";
+
 
 import type {
   TaskCategory,
   TaskAddedBy,
 } from "@prisma/client";
 
-interface EditTaskDialogProps {
-  weddingId: string;
 
-  task: {
-    id: string;
-    title: string;
-    category: TaskCategory;
-    addedBy: TaskAddedBy;
-    dueDate: Date | null;
-    completed: boolean;
-    remarks: string | null;
+
+interface EditTaskDialogProps {
+
+  weddingId:string;
+
+  task:{
+    id:string;
+    title:string;
+    category:TaskCategory;
+    addedBy:TaskAddedBy;
+    dueDate:Date|null;
+    completed:boolean;
+    remarks:string|null;
   };
 
-  onSuccess?: () => void;
+  onSuccess?:()=>void | Promise<void>;
+
 }
 
+
+
 export function EditTaskDialog({
+
   weddingId,
   task,
   onSuccess,
-}: EditTaskDialogProps) {
 
-  const [open, setOpen] =
-    useState(false);
+}:EditTaskDialogProps){
 
-  function handleSuccess() {
 
-    setOpen(false);
+  const [
+    open,
+    setOpen,
+  ] = useState(false);
 
-    onSuccess?.();
 
-  }
+
+async function handleSuccess(){
+
+  setOpen(false);
+
+  await onSuccess?.();
+
+}
+
+
 
   return (
+
     <Dialog
-      open={open}
-      onOpenChange={setOpen}
+
+      open={
+        open
+      }
+
+      onOpenChange={
+        setOpen
+      }
+
     >
 
+
       <DialogTrigger
+
         render={
+
           <button
             className="
               rounded-md
@@ -72,18 +104,27 @@ export function EditTaskDialog({
               hover:bg-gray-100
             "
           >
+
             <Pencil className="h-4 w-4" />
+
           </button>
+
         }
+
       />
 
+
+
       <DialogContent
+
         className="
           max-w-2xl
           max-h-[90vh]
           overflow-y-auto
         "
+
       >
+
 
         <DialogHeader>
 
@@ -93,15 +134,32 @@ export function EditTaskDialog({
 
         </DialogHeader>
 
+
+
         <TaskForm
-          weddingId={weddingId}
+
+          weddingId={
+            weddingId
+          }
+
           mode="edit"
-          task={task}
-          onSuccess={handleSuccess}
+
+          task={
+            task
+          }
+
+          onSuccess={
+            handleSuccess
+          }
+
         />
+
 
       </DialogContent>
 
+
     </Dialog>
+
   );
+
 }

@@ -34,20 +34,31 @@ import {
 
 
 export interface BudgetRow {
+
   id: string;
+
   description: string;
+
   category: BudgetCategory;
+
   estimated: number;
+
   actual: number | null;
+
   paid: number | null;
+
   remarks: string | null;
+
   addedBy: string;
+
 }
+
 
 
 function formatCurrency(
   amount: number | null
 ) {
+
   return new Intl.NumberFormat(
     "en-IN",
     {
@@ -58,12 +69,16 @@ function formatCurrency(
   ).format(
     amount ?? 0
   );
+
 }
 
 
+
 export function getBudgetColumns(
-  weddingId: string
+  weddingId: string,
+  onRefresh?: () => void
 ): ColumnDef<BudgetRow>[] {
+
 
   return [
 
@@ -71,36 +86,50 @@ export function getBudgetColumns(
       accessorKey: "description",
 
       header: ({ column }) => (
+
         <DataTableColumnHeader
           column={column}
           title="Description"
         />
+
       ),
 
       cell: ({ row }) => (
+
         row.original.description
+
       ),
+
     },
+
 
 
     {
       accessorKey: "category",
 
       header: ({ column }) => (
+
         <DataTableColumnHeader
           column={column}
           title="Category"
         />
+
       ),
 
       cell: ({ row }) => (
+
         <Badge variant="secondary">
+
           {
             row.original.category
           }
+
         </Badge>
+
       ),
+
     },
+
 
 
     {
@@ -109,10 +138,13 @@ export function getBudgetColumns(
       header: "Estimated",
 
       cell: ({ row }) =>
+
         formatCurrency(
           row.original.estimated
         ),
+
     },
+
 
 
     {
@@ -121,10 +153,13 @@ export function getBudgetColumns(
       header: "Actual",
 
       cell: ({ row }) =>
+
         formatCurrency(
           row.original.actual
         ),
+
     },
+
 
 
     {
@@ -133,10 +168,13 @@ export function getBudgetColumns(
       header: "Paid",
 
       cell: ({ row }) =>
+
         formatCurrency(
           row.original.paid
         ),
+
     },
+
 
 
     {
@@ -145,8 +183,11 @@ export function getBudgetColumns(
       header: "Remarks",
 
       cell: ({ row }) =>
+
         row.original.remarks ?? "—",
+
     },
+
 
 
     {
@@ -155,13 +196,19 @@ export function getBudgetColumns(
       header: "Added By",
 
       cell: ({ row }) => (
+
         <Badge variant="outline">
+
           {
             row.original.addedBy
           }
+
         </Badge>
+
       ),
+
     },
+
 
 
     {
@@ -169,13 +216,16 @@ export function getBudgetColumns(
 
       header: "Actions",
 
+
       cell: ({ row }) => {
+
 
         const [
           editOpen,
           setEditOpen,
         ] =
           useState(false);
+
 
 
         const [
@@ -185,68 +235,115 @@ export function getBudgetColumns(
           useState(false);
 
 
+
         return (
+
           <>
+
+
             <div className="flex gap-2">
 
+
               <Button
+
                 size="sm"
+
                 variant="outline"
+
                 onClick={() =>
                   setEditOpen(true)
                 }
+
               >
+
                 Edit
+
               </Button>
+
 
 
               <Button
+
                 size="sm"
+
                 variant="destructive"
+
                 onClick={() =>
                   setDeleteOpen(true)
                 }
+
               >
+
                 Delete
+
               </Button>
+
 
             </div>
 
 
+
+
+
             <EditBudgetDialog
+
               weddingId={
                 weddingId
               }
+
               item={
                 row.original
               }
+
               open={
                 editOpen
               }
+
               onOpenChange={
                 setEditOpen
               }
+
+              onSuccess={
+                onRefresh
+              }
+
             />
+
+
+
 
 
             <DeleteBudgetDialog
+
               weddingId={
                 weddingId
               }
+
               budgetId={
                 row.original.id
               }
+
               open={
                 deleteOpen
               }
+
               onOpenChange={
                 setDeleteOpen
               }
+
+              onSuccess={
+                onRefresh
+              }
+
             />
+
+
           </>
+
         );
 
       },
+
     },
 
   ];

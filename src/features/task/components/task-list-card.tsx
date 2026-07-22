@@ -5,24 +5,30 @@ import {
   TaskAddedBy,
 } from "@prisma/client";
 
+
 import {
   CreateTaskDialog,
 } from "./create-task-dialog";
+
 
 import {
   EditTaskListDialog,
 } from "./edit-task-list-dialog";
 
+
 import {
   DeleteTaskListDialog,
 } from "./delete-task-list-dialog";
+
 
 import {
   TaskTable,
 } from "./task-table";
 
 
+
 interface TaskListCardProps {
+
   weddingId: string;
 
   taskList: {
@@ -38,19 +44,26 @@ interface TaskListCardProps {
       completed: boolean;
       remarks: string | null;
     }>;
+
   };
 
-  onRefresh?: () => void;
+  onRefresh?: () => void | Promise<void>;
+
 }
 
 
+
 export function TaskListCard({
+
   weddingId,
   taskList,
   onRefresh,
+
 }: TaskListCardProps) {
 
+
   return (
+
     <div
       className="
         rounded-2xl
@@ -63,58 +76,134 @@ export function TaskListCard({
       "
     >
 
-      <div className="flex items-center justify-between">
+
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+        "
+      >
+
 
         <div>
 
-          <h3 className="text-lg font-bold text-stone-900">
+          <h3
+            className="
+              text-lg
+              font-bold
+              text-stone-900
+            "
+          >
             {taskList.name}
           </h3>
 
 
-          <p className="mt-1 text-sm font-medium text-stone-500">
+          <p
+            className="
+              mt-1
+              text-sm
+              font-medium
+              text-stone-500
+            "
+          >
             {taskList.tasks.length} tasks
           </p>
 
         </div>
 
 
+
         <div className="flex gap-2">
 
+
           <EditTaskListDialog
-            weddingId={weddingId}
-            taskList={taskList}
+
+            weddingId={
+              weddingId
+            }
+
+            taskList={
+              taskList
+            }
+
+            onSuccess={
+              onRefresh
+            }
+
           />
+
 
 
           <DeleteTaskListDialog
-            weddingId={weddingId}
-            taskListId={taskList.id}
+
+            weddingId={
+              weddingId
+            }
+
+            taskListId={
+              taskList.id
+            }
+
+            onSuccess={
+              onRefresh
+            }
+
           />
 
+
         </div>
+
 
       </div>
 
 
+
+
       <TaskTable
-        weddingId={weddingId}
-        tasks={taskList.tasks}
-        onRefresh={onRefresh}
+
+        weddingId={
+          weddingId
+        }
+
+        tasks={
+          taskList.tasks
+        }
+
+        onRefresh={
+          onRefresh
+        }
+
       />
+
+
 
 
       <div className="flex justify-end">
 
+
         <CreateTaskDialog
-          weddingId={weddingId}
-          taskListId={taskList.id}
-          onSuccess={onRefresh}
+
+          weddingId={
+            weddingId
+          }
+
+          taskListId={
+            taskList.id
+          }
+
+          onSuccess={
+            onRefresh
+          }
+
         />
+
 
       </div>
 
 
     </div>
+
   );
+
 }

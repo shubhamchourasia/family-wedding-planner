@@ -5,17 +5,21 @@ import {
   useTransition,
 } from "react";
 
+
 import {
   Trash2,
 } from "lucide-react";
+
 
 import {
   deleteTaskAction,
 } from "../actions/delete-task";
 
+
 import {
   Button,
 } from "@/components/ui/button";
+
 
 import {
   Dialog,
@@ -25,31 +29,51 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+
+
 interface DeleteTaskDialogProps {
-  weddingId: string;
-  taskId: string;
-  taskTitle: string;
-  onSuccess?: () => void;
+
+  weddingId:string;
+
+  taskId:string;
+
+  taskTitle:string;
+
+  onSuccess?:()=>void | Promise<void>;
+
 }
 
+
+
 export function DeleteTaskDialog({
+
   weddingId,
   taskId,
   taskTitle,
   onSuccess,
-}: DeleteTaskDialogProps) {
 
-  const [open, setOpen] =
-    useState(false);
+}:DeleteTaskDialogProps){
+
+
+  const [
+    open,
+    setOpen,
+  ] = useState(false);
+
+
 
   const [
     pending,
     startTransition,
   ] = useTransition();
 
-  function handleDelete() {
 
-    startTransition(async () => {
+
+  function handleDelete(){
+
+
+    startTransition(async()=>{
+
 
       const result =
         await deleteTaskAction(
@@ -57,27 +81,43 @@ export function DeleteTaskDialog({
           taskId
         );
 
-      if (!result.success) {
-        console.error(result.error);
-        return;
+
+
+      if(result.success){
+
+        setOpen(false);
+
+        onSuccess?.();
+
       }
 
-      setOpen(false);
-
-      onSuccess?.();
 
     });
 
+
   }
 
+
+
   return (
+
     <Dialog
-      open={open}
-      onOpenChange={setOpen}
+
+      open={
+        open
+      }
+
+      onOpenChange={
+        setOpen
+      }
+
     >
 
+
       <DialogTrigger
+
         render={
+
           <button
             className="
               rounded-md
@@ -87,14 +127,23 @@ export function DeleteTaskDialog({
               hover:bg-red-50
             "
           >
-            <Trash2 className="h-4 w-4" />
+
+            <Trash2 className="h-4 w-4"/>
+
           </button>
+
         }
+
       />
 
+
+
       <DialogContent
+
         className="max-w-md"
+
       >
+
 
         <DialogHeader>
 
@@ -104,46 +153,83 @@ export function DeleteTaskDialog({
 
         </DialogHeader>
 
+
+
+
         <div className="space-y-5">
 
+
           <p className="text-gray-600">
+
             Are you sure you want to delete
+
             <span className="font-semibold">
+
               {" "}
               {taskTitle}
+
             </span>
+
             ?
+
           </p>
+
+
+
 
           <div className="flex justify-end gap-3">
 
-            <Button
-              variant="outline"
-              onClick={() =>
-                setOpen(false)
-              }
-            >
-              Cancel
-            </Button>
 
             <Button
-              variant="destructive"
-              disabled={pending}
-              onClick={handleDelete}
+
+              variant="outline"
+
+              onClick={()=>
+                setOpen(false)
+              }
+
             >
+
+              Cancel
+
+            </Button>
+
+
+
+            <Button
+
+              variant="destructive"
+
+              disabled={
+                pending
+              }
+
+              onClick={
+                handleDelete
+              }
+
+            >
+
               {
                 pending
-                  ? "Deleting..."
-                  : "Delete"
+                ? "Deleting..."
+                : "Delete"
               }
+
             </Button>
+
 
           </div>
 
+
         </div>
+
 
       </DialogContent>
 
+
     </Dialog>
+
   );
+
 }

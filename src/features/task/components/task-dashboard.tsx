@@ -15,6 +15,7 @@ import type {
 
 
 interface TaskDashboardProps {
+
   weddingId: string;
 
   taskLists: Array<{
@@ -30,37 +31,80 @@ interface TaskDashboardProps {
       completed: boolean;
       remarks: string | null;
     }>;
+
   }>;
+
+  onRefresh?: () => void | Promise<void>;
+
 }
+
 
 
 export function TaskDashboard({
   weddingId,
   taskLists,
+  onRefresh,
 }: TaskDashboardProps) {
 
+
   return (
+
     <div className="space-y-6">
 
 
-      <div className="flex items-center justify-between px-2">
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+          px-2
+        "
+      >
 
-      <div>
-        <h2 className="pl-2 text-2xl font-bold text-stone-900">
-          Task Management
-        </h2>
 
-        <p className="pl-2 text-gray-500">
-          Manage wedding tasks, responsibilities and progress.
-        </p>
+        <div>
+
+          <h2
+            className="
+              pl-2
+              text-2xl
+              font-bold
+              text-stone-900
+            "
+          >
+            Task Management
+          </h2>
+
+
+          <p
+            className="
+              pl-2
+              text-gray-500
+            "
+          >
+            Manage wedding tasks, responsibilities and progress.
+          </p>
+
+
+        </div>
+
+
+
+        <CreateTaskListDialog
+
+          weddingId={
+            weddingId
+          }
+
+          onSuccess={
+            onRefresh
+          }
+
+        />
+
+
       </div>
 
-
-      <CreateTaskListDialog
-        weddingId={weddingId}
-      />
-
-    </div>
 
 
 
@@ -82,12 +126,28 @@ export function TaskDashboard({
         ) : (
 
           taskLists.map(
-            (taskList) => (
+            (
+              taskList
+            ) => (
 
               <TaskListCard
-                key={taskList.id}
-                weddingId={weddingId}
-                taskList={taskList}
+
+                key={
+                  taskList.id
+                }
+
+                weddingId={
+                  weddingId
+                }
+
+                taskList={
+                  taskList
+                }
+
+                onRefresh={
+                  onRefresh
+                }
+
               />
 
             )
@@ -98,5 +158,7 @@ export function TaskDashboard({
 
 
     </div>
+
   );
+
 }

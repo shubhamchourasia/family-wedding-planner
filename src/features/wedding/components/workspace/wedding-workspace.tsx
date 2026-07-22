@@ -5,47 +5,38 @@ import {
   useState,
 } from "react";
 
-
 import {
   WeddingHeader,
 } from "./wedding-header";
-
 
 import {
   WeddingTabs,
   type WeddingTab,
 } from "./wedding-tabs";
 
-
 import {
   WeddingOverview,
 } from "./wedding-overview";
-
 
 import {
   WeddingEvents,
 } from "./wedding-events";
 
-
 import {
   WeddingGuests,
 } from "./wedding-guests";
-
 
 import {
   WeddingBudget,
 } from "@/features/budget/components/wedding-budget";
 
-
 import {
   TaskDashboard,
 } from "@/features/task/components/task-dashboard";
 
-
 import {
   useWeddingTabData,
 } from "@/features/wedding/hooks/use-wedding-tab-data";
-
 
 
 interface WeddingWorkspaceProps {
@@ -73,7 +64,6 @@ interface WeddingWorkspaceProps {
 }
 
 
-
 export function WeddingWorkspace({
   wedding,
 }: WeddingWorkspaceProps) {
@@ -87,11 +77,11 @@ export function WeddingWorkspace({
   );
 
 
-
   const {
     data,
     loading,
     loadTab,
+    refreshTab,
   } = useWeddingTabData(
     wedding.id
   );
@@ -143,7 +133,6 @@ export function WeddingWorkspace({
       />
 
 
-
       <div
         className="
           absolute
@@ -151,7 +140,6 @@ export function WeddingWorkspace({
           bg-[#faf7f2]/65
         "
       />
-
 
 
       <div
@@ -168,7 +156,6 @@ export function WeddingWorkspace({
         <WeddingHeader
           wedding={wedding}
         />
-
 
 
         <WeddingTabs
@@ -211,6 +198,10 @@ export function WeddingWorkspace({
 
                 }}
 
+                onRefresh={() =>
+                  refreshTab("Events")
+                }
+
               />
 
             )
@@ -241,6 +232,10 @@ export function WeddingWorkspace({
 
                 guests={
                   data.guests
+                }
+
+                onRefresh={() =>
+                  refreshTab("Guests")
                 }
 
               />
@@ -275,6 +270,10 @@ export function WeddingWorkspace({
                   data.budgetItems
                 }
 
+                onRefresh={() =>
+                  refreshTab("Budget")
+                }
+
               />
 
             )
@@ -301,6 +300,10 @@ export function WeddingWorkspace({
 
                 taskLists={
                   data.taskLists
+                }
+
+                onRefresh={() =>
+                  refreshTab("Tasks")
                 }
 
               />
@@ -333,7 +336,6 @@ export function WeddingWorkspace({
 
           )
         }
-
 
 
       </div>

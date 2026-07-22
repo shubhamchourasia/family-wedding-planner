@@ -37,6 +37,7 @@ import {
 
 
 interface WeddingGuestsProps {
+
   weddingId: string;
 
   events: Array<{
@@ -44,39 +45,32 @@ interface WeddingGuestsProps {
     title: string;
   }>;
 
-  guests: Array<{
-    id: string;
-    fullName: string;
-    phone: string | null;
-    email: string | null;
-    side: string;
-    food: string | null;
-    relation: string | null;
-    city: string | null;
-    accommodationRequired: boolean;
-    transportRequired: boolean;
-    notes: string | null;
-    events?: Array<{
-      eventId: string;
-      event: {
-        id: string;
-        title: string;
-      };
-    }>;
-  }>;
+  guests: Array<any>;
+
+  onRefresh?: () => void | Promise<void>;
+
 }
 
 
+
 export function WeddingGuests({
+
   weddingId,
+
   events,
+
   guests: initialGuests,
+
+  onRefresh,
+
 }: WeddingGuestsProps) {
+
 
   const [
     guests,
     setGuests,
   ] = useState(initialGuests);
+
 
 
   const [
@@ -85,16 +79,19 @@ export function WeddingGuests({
   ] = useState("ALL");
 
 
+
   const [
     selectedSide,
     setSelectedSide,
   ] = useState("ALL");
 
 
+
   const [
     search,
     setSearch,
   ] = useState("");
+
 
 
   async function refreshGuests() {
@@ -104,9 +101,16 @@ export function WeddingGuests({
         weddingId
       );
 
-    setGuests(updatedGuests);
+
+    setGuests(
+      updatedGuests
+    );
+
+
+    await onRefresh?.();
 
   }
+
 
 
   const filteredGuests =
@@ -119,9 +123,10 @@ export function WeddingGuests({
             selectedEvent === "ALL"
               ? true
               : guest.events?.some(
-                  (guestEvent) =>
+                  (guestEvent:any) =>
                     guestEvent.eventId === selectedEvent
                 );
+
 
 
           const matchesSide =
@@ -136,8 +141,10 @@ export function WeddingGuests({
                   : guest.side === "BOTH";
 
 
+
           const keyword =
             search.toLowerCase();
+
 
 
           const matchesSearch =
@@ -154,6 +161,7 @@ export function WeddingGuests({
             guest.relation
               ?.toLowerCase()
               .includes(keyword);
+
 
 
           return (
@@ -174,6 +182,7 @@ export function WeddingGuests({
     ]);
 
 
+
   const selectedEventTitle =
     selectedEvent === "ALL"
       ? "All Events"
@@ -183,41 +192,61 @@ export function WeddingGuests({
         )?.title ?? "All Events";
 
 
+
   return (
 
     <div className="space-y-6">
 
 
-      {/* Header */}
-
-      <div className="flex items-center justify-between">
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+        "
+      >
 
         <div>
 
-          <div>
-          <h2 className="pl-2 text-2xl font-semibold text-stone-900">
+          <h2
+            className="
+              pl-2
+              text-2xl
+              font-semibold
+              text-stone-900
+            "
+          >
             Guest Management
           </h2>
 
-          <p className="pl-2 text-gray-500">
+
+          <p
+            className="
+              pl-2
+              text-gray-500
+            "
+          >
             Manage wedding invitations and guest details.
           </p>
-        </div>
 
         </div>
+
 
 
         <CreateGuestDialog
+
           weddingId={weddingId}
+
           events={events}
+
           onSuccess={refreshGuests}
+
         />
+
 
       </div>
 
 
-
-      {/* Filters */}
 
       <div
         className="
@@ -230,12 +259,22 @@ export function WeddingGuests({
         "
       >
 
-        <div className="flex flex-wrap items-center gap-4">
+        <div
+          className="
+            flex
+            flex-wrap
+            items-center
+            gap-4
+          "
+        >
 
-
-          {/* Search */}
-
-          <div className="relative min-w-[260px] flex-1">
+          <div
+            className="
+              relative
+              min-w-[260px]
+              flex-1
+            "
+          >
 
             <Search
               className="
@@ -251,60 +290,55 @@ export function WeddingGuests({
 
 
             <Input
+
               placeholder="Search guests..."
+
               value={search}
+
               onChange={(e)=>
                 setSearch(
                   e.target.value
                 )
               }
+
               className="
                 h-11
                 rounded-xl
                 border-amber-200
                 bg-[#fffdf8]
                 pl-10
-                text-stone-700
-                placeholder:text-stone-400
-                focus-visible:ring-amber-300
               "
+
             />
 
           </div>
 
 
 
-          {/* Event Filter */}
-
           <div className="flex items-center gap-2">
 
             <CalendarDays
-              className="
-                h-5
-                w-5
-                text-amber-700
-              "
+              className="h-5 w-5 text-amber-700"
             />
 
 
             <Select
+
               value={selectedEvent}
-              onValueChange={(value)=>
-                setSelectedEvent(
-                  value ?? "ALL"
-                )
+
+              onValueChange={
+                (value)=>
+                  setSelectedEvent(
+                    value ?? "ALL"
+                  )
               }
+
             >
 
               <SelectTrigger
                 className="
                   h-11
                   w-56
-                  rounded-xl
-                  border-amber-200
-                  bg-[#fffdf8]
-                  text-stone-700
-                  focus:ring-amber-300
                 "
               >
 
@@ -324,13 +358,18 @@ export function WeddingGuests({
 
                 {
                   events.map(
-                    (event)=>(
+                    event => (
 
                       <SelectItem
+
                         key={event.id}
+
                         value={event.id}
+
                       >
+
                         {event.title}
+
                       </SelectItem>
 
                     )
@@ -342,43 +381,34 @@ export function WeddingGuests({
 
             </Select>
 
-
           </div>
 
 
 
-          {/* Side Filter */}
-
           <div className="flex items-center gap-2">
 
-
             <Users
-              className="
-                h-5
-                w-5
-                text-amber-700
-              "
+              className="h-5 w-5 text-amber-700"
             />
 
 
             <Select
+
               value={selectedSide}
-              onValueChange={(value)=>
-                setSelectedSide(
-                  value ?? "ALL"
-                )
+
+              onValueChange={
+                value =>
+                  setSelectedSide(
+                    value ?? "ALL"
+                  )
               }
+
             >
 
               <SelectTrigger
                 className="
                   h-11
                   w-44
-                  rounded-xl
-                  border-amber-200
-                  bg-[#fffdf8]
-                  text-stone-700
-                  focus:ring-amber-300
                 "
               >
 
@@ -407,40 +437,32 @@ export function WeddingGuests({
 
               </SelectContent>
 
-            </Select>
 
+            </Select>
 
           </div>
 
-
-
-          {/* Count */}
 
           <div
             className="
               ml-auto
               rounded-full
-              border
-              border-amber-200
               bg-amber-50
               px-5
               py-2.5
               text-sm
-              font-medium
               text-amber-800
             "
           >
 
             Showing{" "}
-            <span className="font-bold">
+            <b>
               {filteredGuests.length}
-            </span>
-
+            </b>
             {" "}of{" "}
-
-            <span className="font-bold">
+            <b>
               {guests.length}
-            </span>
+            </b>
 
           </div>
 
@@ -452,10 +474,15 @@ export function WeddingGuests({
 
 
       <GuestList
+
         weddingId={weddingId}
+
         events={events}
+
         guests={filteredGuests}
+
         onRefresh={refreshGuests}
+
       />
 
 
