@@ -22,7 +22,9 @@ import {
 
 
 interface WeddingBudgetProps {
+
   weddingId: string;
+
   overallBudget: number | null;
 
   budgetItems: Array<{
@@ -35,53 +37,104 @@ interface WeddingBudgetProps {
     remarks: string | null;
     addedBy: string;
   }>;
+
+  onRefresh?: () => void;
+
 }
 
 
+
 export function WeddingBudget({
+
   weddingId,
+
   overallBudget,
+
   budgetItems,
+
+  onRefresh,
+
 }: WeddingBudgetProps) {
 
+
   return (
+
     <div className="space-y-6">
 
 
       <div className="flex items-center justify-between gap-3">
 
-  <div>
-    <h2 className="pl-2 text-2xl font-semibold text-stone-900">
-      Budget Management
-    </h2>
 
-    <p className="pl-2 text-gray-500">
-      Manage budget items and expenses.
-    </p>
-  </div>
+        <div>
+
+          <h2 className="pl-2 text-2xl font-semibold text-stone-900">
+
+            Budget Management
+
+          </h2>
 
 
-  <div className="flex items-center gap-3">
+          <p className="pl-2 text-gray-500">
 
-    <OverallBudgetCard
-      weddingId={weddingId}
-      overallBudget={overallBudget}
-    />
+            Manage budget items and expenses.
 
-    <CreateBudgetDialog
-      weddingId={weddingId}
-    />
+          </p>
 
-  </div>
 
-</div>
+        </div>
+
+
+
+        <div className="flex items-center gap-3">
+
+
+          <OverallBudgetCard
+
+            weddingId={
+              weddingId
+            }
+
+            overallBudget={
+              overallBudget
+            }
+
+          />
+
+
+
+          <CreateBudgetDialog
+
+            weddingId={
+              weddingId
+            }
+
+            onSuccess={
+              onRefresh
+            }
+
+          />
+
+
+        </div>
+
+
+      </div>
+
 
 
 
       <BudgetDashboard
-        overallBudget={overallBudget}
-        budgetItems={budgetItems}
+
+        overallBudget={
+          overallBudget
+        }
+
+        budgetItems={
+          budgetItems
+        }
+
       />
+
 
 
 
@@ -97,13 +150,27 @@ export function WeddingBudget({
       >
 
         <BudgetTable
-          weddingId={weddingId}
-          items={budgetItems}
+
+          weddingId={
+            weddingId
+          }
+
+          items={
+            budgetItems
+          }
+
+          onRefresh={
+            onRefresh
+          }
+
         />
+
 
       </div>
 
 
     </div>
+
   );
+
 }

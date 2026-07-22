@@ -8,6 +8,7 @@ import {
   updateTask,
 } from "../services/task.service";
 
+
 export async function updateTaskAction(
   weddingId: string,
   id: string,
@@ -19,26 +20,43 @@ export async function updateTaskAction(
     addedBy: any;
   }
 ) {
+
   try {
-    await updateTask(
-      id,
-      values
-    );
+
+
+    const result =
+      await updateTask(
+        id,
+        values
+      );
+
 
     revalidatePath(
       `/weddings/${weddingId}`
     );
 
+
     return {
       success: true,
+      data: result,
     };
 
-  } catch (error) {
-    console.error(error);
+
+  } catch(error) {
+
+
+    console.error(
+      "UPDATE TASK FAILED:",
+      error
+    );
+
 
     return {
-      success: false,
-      error: "Failed to update task.",
+      success:false,
+      error:
+        "Failed to update task.",
     };
+
   }
+
 }

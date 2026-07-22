@@ -49,7 +49,9 @@ import {
 
 
 interface EditBudgetDialogProps {
+
   weddingId: string;
+
   item: {
     id: string;
     description: string;
@@ -60,18 +62,26 @@ interface EditBudgetDialogProps {
     remarks: string | null;
     addedBy: string;
   };
+
   open: boolean;
+
   onOpenChange: (
     open: boolean
   ) => void;
+
+  onSuccess?: () => void;
+
 }
+
 
 
 type BudgetInput =
   z.input<typeof budgetSchema>;
 
+
 type BudgetOutput =
   z.output<typeof budgetSchema>;
+
 
 
 const addedByOptions = [
@@ -83,12 +93,21 @@ const addedByOptions = [
 ];
 
 
+
 export function EditBudgetDialog({
+
   weddingId,
+
   item,
+
   open,
+
   onOpenChange,
+
+  onSuccess,
+
 }: EditBudgetDialogProps) {
+
 
   const [
     pending,
@@ -97,42 +116,57 @@ export function EditBudgetDialog({
     useTransition();
 
 
+
   const form =
     useForm<
       BudgetInput,
       unknown,
       BudgetOutput
     >({
+
       resolver:
         zodResolver(
           budgetSchema
         ),
 
       defaultValues: {
+
         description:
           item.description,
+
         category:
           item.category,
+
         estimated:
           item.estimated,
+
         actual:
           item.actual,
+
         paid:
           item.paid,
+
         remarks:
           item.remarks ?? "",
+
         addedBy:
           item.addedBy as BudgetInput["addedBy"],
+
       },
+
     });
+
 
 
   function onSubmit(
     values: BudgetOutput
   ) {
 
+
     startTransition(
+
       async () => {
+
 
         const result =
           await updateBudgetAction(
@@ -141,45 +175,76 @@ export function EditBudgetDialog({
             values
           );
 
+
+
         if (
           result.success
         ) {
+
+
+          form.reset();
+
+
           onOpenChange(
             false
           );
+
+
+          onSuccess?.();
+
+
         }
 
+
       }
+
     );
+
 
   }
 
 
+
   return (
+
     <Dialog
+
       open={
         open
       }
+
       onOpenChange={
         onOpenChange
       }
+
     >
+
       <DialogContent>
 
+
         <DialogHeader>
+
           <DialogTitle>
             Edit Budget Item
           </DialogTitle>
+
         </DialogHeader>
 
+
+
         <form
+
           onSubmit={
             form.handleSubmit(
               onSubmit
             )
           }
+
           className="space-y-5"
+
         >
+
+
 
           <div className="space-y-2">
 
@@ -187,13 +252,18 @@ export function EditBudgetDialog({
               Description
             </Label>
 
+
             <Input
+
               {...form.register(
                 "description"
               )}
+
             />
 
           </div>
+
+
 
 
           <div className="space-y-2">
@@ -202,11 +272,22 @@ export function EditBudgetDialog({
               Category
             </Label>
 
+
             <select
-              className="h-10 w-full rounded-md border px-3 text-sm"
+
+              className="
+                h-10
+                w-full
+                rounded-md
+                border
+                px-3
+                text-sm
+              "
+
               {...form.register(
                 "category"
               )}
+
             >
 
               {
@@ -218,16 +299,21 @@ export function EditBudgetDialog({
                   ) => (
 
                     <option
+
                       key={
                         category
                       }
+
                       value={
                         category
                       }
+
                     >
+
                       {
                         category
                       }
+
                     </option>
 
                   )
@@ -239,7 +325,10 @@ export function EditBudgetDialog({
           </div>
 
 
+
+
           <div className="grid gap-5 md:grid-cols-3">
+
 
             <div className="space-y-2">
 
@@ -247,14 +336,19 @@ export function EditBudgetDialog({
                 Estimated
               </Label>
 
+
               <Input
+
                 type="number"
+
                 {...form.register(
                   "estimated"
                 )}
+
               />
 
             </div>
+
 
 
             <div className="space-y-2">
@@ -263,14 +357,19 @@ export function EditBudgetDialog({
                 Actual
               </Label>
 
+
               <Input
+
                 type="number"
+
                 {...form.register(
                   "actual"
                 )}
+
               />
 
             </div>
+
 
 
             <div className="space-y-2">
@@ -279,16 +378,24 @@ export function EditBudgetDialog({
                 Paid
               </Label>
 
+
               <Input
+
                 type="number"
+
                 {...form.register(
                   "paid"
                 )}
+
               />
 
             </div>
 
+
           </div>
+
+
+
 
 
           <div className="space-y-2">
@@ -297,14 +404,21 @@ export function EditBudgetDialog({
               Remarks
             </Label>
 
+
             <Input
+
               placeholder="Additional comments..."
+
               {...form.register(
                 "remarks"
               )}
+
             />
 
           </div>
+
+
+
 
 
           <div className="space-y-2">
@@ -313,11 +427,22 @@ export function EditBudgetDialog({
               Added By
             </Label>
 
+
             <select
-              className="h-10 w-full rounded-md border px-3 text-sm"
+
+              className="
+                h-10
+                w-full
+                rounded-md
+                border
+                px-3
+                text-sm
+              "
+
               {...form.register(
                 "addedBy"
               )}
+
             >
 
               {
@@ -327,34 +452,48 @@ export function EditBudgetDialog({
                   ) => (
 
                     <option
+
                       key={
                         person
                       }
+
                       value={
                         person
                       }
+
                     >
+
                       {
                         person
                       }
+
                     </option>
 
                   )
                 )
               }
 
+
             </select>
+
 
           </div>
 
 
+
+
+
           <div className="flex justify-end pt-2">
 
+
             <Button
+
               type="submit"
+
               disabled={
                 pending
               }
+
             >
 
               {
@@ -363,15 +502,22 @@ export function EditBudgetDialog({
                   : "Update Budget"
               }
 
+
             </Button>
+
 
           </div>
 
+
+
         </form>
+
 
       </DialogContent>
 
+
     </Dialog>
+
   );
 
 }

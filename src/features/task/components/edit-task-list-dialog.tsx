@@ -5,21 +5,26 @@ import {
   useTransition,
 } from "react";
 
+
 import {
   updateTaskListAction,
 } from "../actions/update-task-list";
+
 
 import {
   Button,
 } from "@/components/ui/button";
 
+
 import {
   Input,
 } from "@/components/ui/input";
 
+
 import {
   Label,
 } from "@/components/ui/label";
+
 
 import {
   Dialog,
@@ -28,28 +33,43 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+
+
 interface EditTaskListDialogProps {
+
   weddingId: string;
+
   taskList: {
     id: string;
     name: string;
   };
+
+  onSuccess?: () => void | Promise<void>;
+
 }
 
+
+
 export function EditTaskListDialog({
+
   weddingId,
   taskList,
+  onSuccess,
+
 }: EditTaskListDialogProps) {
+
 
   const [
     open,
     setOpen,
   ] = useState(false);
 
+
   const [
     pending,
     startTransition,
   ] = useTransition();
+
 
   const [
     name,
@@ -58,9 +78,13 @@ export function EditTaskListDialog({
     taskList.name
   );
 
-  function handleUpdate() {
+
+
+  function handleUpdate(){
+
 
     startTransition(async()=>{
+
 
       const result =
         await updateTaskListAction(
@@ -69,33 +93,56 @@ export function EditTaskListDialog({
           name
         );
 
+
       if(result.success){
+
         setOpen(false);
+
+        onSuccess?.();
+
       }
 
+
     });
+
 
   }
 
 
+
   return (
+
     <Dialog
-      open={open}
-      onOpenChange={setOpen}
+
+      open={
+        open
+      }
+
+      onOpenChange={
+        setOpen
+      }
+
     >
 
+
       <Button
+
         size="sm"
+
         variant="outline"
+
         onClick={()=>
           setOpen(true)
         }
+
       >
         Edit List
       </Button>
 
 
+
       <DialogContent>
+
 
         <DialogHeader>
 
@@ -106,7 +153,9 @@ export function EditTaskListDialog({
         </DialogHeader>
 
 
+
         <div className="space-y-4">
+
 
           <div className="space-y-2">
 
@@ -114,32 +163,45 @@ export function EditTaskListDialog({
               List Name
             </Label>
 
+
             <Input
-              value={name}
+
+              value={
+                name
+              }
+
               onChange={(e)=>
                 setName(
                   e.target.value
                 )
               }
+
             />
+
 
           </div>
 
 
+
           <Button
+
             disabled={
               pending ||
               !name.trim()
             }
+
             onClick={
               handleUpdate
             }
+
           >
+
             {
               pending
               ? "Updating..."
               : "Update List"
             }
+
           </Button>
 
 
@@ -148,6 +210,9 @@ export function EditTaskListDialog({
 
       </DialogContent>
 
+
     </Dialog>
+
   );
+
 }

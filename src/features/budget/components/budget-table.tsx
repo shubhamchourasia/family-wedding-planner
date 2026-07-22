@@ -19,15 +19,27 @@ import {
 
 
 interface BudgetTableProps {
+
   weddingId: string;
+
   items: BudgetRow[];
+
+  onRefresh?: () => void;
+
 }
 
 
+
 export function BudgetTable({
+
   weddingId,
+
   items,
+
+  onRefresh,
+
 }: BudgetTableProps) {
+
 
   const [
     category,
@@ -35,30 +47,48 @@ export function BudgetTable({
   ] = useState("");
 
 
+
   return (
+
     <DataTable
+
       columns={
         getBudgetColumns(
-          weddingId
+          weddingId,
+          onRefresh
         )
       }
+
+
       data={
         items
       }
+
+
       categories={
         Object.values(
           BudgetCategory
         )
       }
+
+
       categoryFilter={
         category
       }
+
+
       onCategoryChange={
         setCategory
       }
+
+
       emptyTitle="No budget items"
+
+
       emptyDescription="No expenses have been added yet."
+
     />
+
   );
 
 }

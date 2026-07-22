@@ -27,6 +27,7 @@ interface DeleteBudgetDialogProps {
   onOpenChange: (
     open: boolean
   ) => void;
+  onSuccess?: () => void;
 }
 
 
@@ -35,12 +36,16 @@ export function DeleteBudgetDialog({
   budgetId,
   open,
   onOpenChange,
+  onSuccess,
 }: DeleteBudgetDialogProps) {
+
 
   const [
     pending,
     startTransition,
   ] = useTransition();
+
+
 
   function handleDelete() {
 
@@ -53,12 +58,18 @@ export function DeleteBudgetDialog({
             weddingId
           );
 
+
         if (
           result.success
         ) {
+
           onOpenChange(
             false
           );
+
+
+          onSuccess?.();
+
         }
 
       }
@@ -66,58 +77,62 @@ export function DeleteBudgetDialog({
 
   }
 
+
+
   return (
     <Dialog
-      open={
-        open
-      }
-      onOpenChange={
-        onOpenChange
-      }
+      open={open}
+      onOpenChange={onOpenChange}
     >
 
       <DialogContent>
 
         <DialogHeader>
+
           <DialogTitle>
             Delete Budget Item
           </DialogTitle>
+
         </DialogHeader>
+
 
         <p className="text-sm text-muted-foreground">
           Are you sure you want to delete this budget item?
         </p>
 
+
+
         <div className="flex justify-end gap-3">
+
 
           <Button
             variant="outline"
             onClick={() =>
-              onOpenChange(
-                false
-              )
+              onOpenChange(false)
             }
           >
             Cancel
           </Button>
 
+
+
           <Button
             variant="destructive"
-            disabled={
-              pending
-            }
-            onClick={
-              handleDelete
-            }
+            disabled={pending}
+            onClick={handleDelete}
           >
+
             {
               pending
                 ? "Deleting..."
                 : "Delete"
             }
+
           </Button>
 
+
         </div>
+
 
       </DialogContent>
 
