@@ -44,7 +44,7 @@ export default function Hero() {
 
 
         <h1 className="max-w-4xl text-6xl font-bold leading-tight text-amber-950">
-          Plan Your Family Wedding Beautifully
+          Wedding Planning, Simplified!
         </h1>
 
 
@@ -58,7 +58,6 @@ export default function Hero() {
         <div className="mt-10 flex flex-wrap justify-center gap-4">
 
           <CreateWeddingDialog />
-
 
           <Link href="/dashboard">
 
@@ -87,7 +86,7 @@ export default function Hero() {
 
       <section className="mx-auto max-w-7xl px-6 pb-20">
 
-        <h2 className="mb-12 text-center text-4xl font-bold text-amber-950">
+        <h2 className="mb-8 text-center text-4xl font-bold text-amber-950">
           Everything you need
         </h2>
 

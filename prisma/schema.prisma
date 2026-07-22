@@ -25,7 +25,6 @@ model Wedding {
   brideName     String
   groomName     String
   startDate     DateTime
-  endDate       DateTime?
   ownerId       String
   overallBudget Float?
   createdAt     DateTime            @default(now())

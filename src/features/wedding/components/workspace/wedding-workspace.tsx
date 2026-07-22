@@ -64,8 +64,6 @@ interface WeddingWorkspaceProps {
 
     startDate: Date;
 
-    endDate: Date | null;
-
     description: string | null;
 
     overallBudget: number | null;
