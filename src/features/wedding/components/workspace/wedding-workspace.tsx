@@ -1,51 +1,51 @@
 "use client";
 
 import {
+  useEffect,
   useState,
 } from "react";
-
-import type {
-  TaskCategory,
-  TaskAddedBy,
-} from "@prisma/client";
 
 
 import {
   WeddingHeader,
 } from "./wedding-header";
 
+
 import {
   WeddingTabs,
   type WeddingTab,
 } from "./wedding-tabs";
 
+
 import {
   WeddingOverview,
 } from "./wedding-overview";
+
 
 import {
   WeddingEvents,
 } from "./wedding-events";
 
+
 import {
   WeddingGuests,
 } from "./wedding-guests";
+
 
 import {
   WeddingBudget,
 } from "@/features/budget/components/wedding-budget";
 
-import {
-  WeddingVendors,
-} from "./wedding-vendors";
-
-import {
-  WeddingDocuments,
-} from "./wedding-documents";
 
 import {
   TaskDashboard,
 } from "@/features/task/components/task-dashboard";
+
+
+import {
+  useWeddingTabData,
+} from "@/features/wedding/hooks/use-wedding-tab-data";
+
 
 
 interface WeddingWorkspaceProps {
@@ -68,45 +68,6 @@ interface WeddingWorkspaceProps {
 
     overallBudget: number | null;
 
-
-    guests: any[];
-
-    events: any[];
-
-    budgetItems: any[];
-
-    vendors: any[];
-
-    documents: any[];
-
-
-    taskLists: Array<{
-
-      id: string;
-
-      name: string;
-
-
-      tasks: Array<{
-
-        id: string;
-
-        title: string;
-
-        category: TaskCategory;
-
-        addedBy: TaskAddedBy;
-
-        dueDate: Date | null;
-
-        completed: boolean;
-
-        remarks: string | null;
-
-      }>;
-
-    }>;
-
   };
 
 }
@@ -126,6 +87,36 @@ export function WeddingWorkspace({
   );
 
 
+
+  const {
+    data,
+    loading,
+    loadTab,
+  } = useWeddingTabData(
+    wedding.id
+  );
+
+
+
+  useEffect(() => {
+
+    if (
+      activeTab !== "Overview"
+    ) {
+
+      loadTab(
+        activeTab
+      );
+
+    }
+
+  }, [
+    activeTab,
+    loadTab,
+  ]);
+
+
+
   return (
 
     <div
@@ -136,7 +127,6 @@ export function WeddingWorkspace({
       "
     >
 
-      {/* Background Image */}
 
       <div
         className="
@@ -153,7 +143,6 @@ export function WeddingWorkspace({
       />
 
 
-      {/* Background Overlay */}
 
       <div
         className="
@@ -164,7 +153,6 @@ export function WeddingWorkspace({
       />
 
 
-      {/* Workspace Content */}
 
       <div
         className="
@@ -182,6 +170,7 @@ export function WeddingWorkspace({
         />
 
 
+
         <WeddingTabs
           activeTab={activeTab}
           onChange={setActiveTab}
@@ -193,7 +182,9 @@ export function WeddingWorkspace({
           activeTab === "Overview" && (
 
             <WeddingOverview
-              wedding={wedding}
+              wedding={{
+                ...wedding,
+              }}
             />
 
           )
@@ -204,9 +195,25 @@ export function WeddingWorkspace({
         {
           activeTab === "Events" && (
 
-            <WeddingEvents
-              wedding={wedding}
-            />
+            loading ? (
+
+              <LoadingCard />
+
+            ) : (
+
+              <WeddingEvents
+
+                wedding={{
+                  id: wedding.id,
+
+                  events:
+                    data.events,
+
+                }}
+
+              />
+
+            )
 
           )
         }
@@ -216,21 +223,29 @@ export function WeddingWorkspace({
         {
           activeTab === "Guests" && (
 
-            <WeddingGuests
+            loading ? (
 
-              weddingId={
-                wedding.id
-              }
+              <LoadingCard />
 
-              events={
-                wedding.events
-              }
+            ) : (
 
-              guests={
-                wedding.guests
-              }
+              <WeddingGuests
 
-            />
+                weddingId={
+                  wedding.id
+                }
+
+                events={
+                  data.events
+                }
+
+                guests={
+                  data.guests
+                }
+
+              />
+
+            )
 
           )
         }
@@ -240,31 +255,29 @@ export function WeddingWorkspace({
         {
           activeTab === "Budget" && (
 
-            <WeddingBudget
+            loading ? (
 
-              weddingId={
-                wedding.id
-              }
+              <LoadingCard />
 
-              overallBudget={
-                wedding.overallBudget
-              }
+            ) : (
 
-              budgetItems={
-                wedding.budgetItems
-              }
+              <WeddingBudget
 
-            />
+                weddingId={
+                  wedding.id
+                }
 
-          )
-        }
+                overallBudget={
+                  wedding.overallBudget
+                }
 
+                budgetItems={
+                  data.budgetItems
+                }
 
+              />
 
-        {
-          activeTab === "Vendors" && (
-
-            <WeddingVendors />
+            )
 
           )
         }
@@ -274,16 +287,36 @@ export function WeddingWorkspace({
         {
           activeTab === "Tasks" && (
 
-            <TaskDashboard
+            loading ? (
 
-              weddingId={
-                wedding.id
-              }
+              <LoadingCard />
 
-              taskLists={
-                wedding.taskLists
-              }
+            ) : (
 
+              <TaskDashboard
+
+                weddingId={
+                  wedding.id
+                }
+
+                taskLists={
+                  data.taskLists
+                }
+
+              />
+
+            )
+
+          )
+        }
+
+
+
+        {
+          activeTab === "Vendors" && (
+
+            <PlaceholderCard
+              title="Vendors"
             />
 
           )
@@ -294,14 +327,69 @@ export function WeddingWorkspace({
         {
           activeTab === "Documents" && (
 
-            <WeddingDocuments />
+            <PlaceholderCard
+              title="Documents"
+            />
 
           )
         }
 
 
+
       </div>
 
+
+    </div>
+
+  );
+
+}
+
+
+
+function LoadingCard() {
+
+  return (
+
+    <div
+      className="
+        rounded-xl
+        bg-white
+        p-6
+        text-center
+        text-gray-500
+      "
+    >
+
+      Loading...
+
+    </div>
+
+  );
+
+}
+
+
+
+function PlaceholderCard({
+  title,
+}: {
+  title: string;
+}) {
+
+  return (
+
+    <div
+      className="
+        rounded-xl
+        bg-white
+        p-6
+        text-center
+        text-gray-500
+      "
+    >
+
+      {title} will load here.
 
     </div>
 
