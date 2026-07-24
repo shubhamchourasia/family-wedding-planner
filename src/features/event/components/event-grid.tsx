@@ -1,54 +1,116 @@
-import { EventCard } from "./event-card";
+"use client";
+
+import {
+  EventCard,
+} from "./event-card";
+
 
 interface EventGridProps {
+
   weddingId: string;
 
   events: Array<{
+
     id: string;
+
     title: string;
+
     type: string;
+
     venue: string | null;
+
     description: string | null;
+
     startTime: Date;
+
     endTime: Date | null;
+
   }>;
+
+  onRefresh?: () => void | Promise<void>;
+
 }
 
+
+
 export function EventGrid({
+
   weddingId,
+
   events,
+
+  onRefresh,
+
 }: EventGridProps) {
-  if (events.length === 0) {
+
+
+  if(events.length === 0) {
+
     return (
+
       <div
         className="
-          rounded-xl
+          rounded-2xl
           border
-          border-dashed
+          border-amber-100
+          workspace-card
           p-10
           text-center
+          text-gray-500
         "
       >
-        <h3 className="text-xl font-semibold">
-          No Events Yet
-        </h3>
 
-        <p className="mt-2 text-gray-500">
-          Create your first wedding event.
-        </p>
+        No events added yet.
+
       </div>
+
     );
+
   }
 
+
+
   return (
-    <div className="grid gap-5">
-      {events.map((event) => (
-        <EventCard
-          key={event.id}
-          weddingId={weddingId}
-          event={event}
-        />
-      ))}
+
+    <div
+      className="
+        grid
+        gap-5
+        md:grid-cols-2
+        lg:grid-cols-3
+      "
+    >
+
+      {
+        events.map(
+          (event) => (
+
+            <EventCard
+
+              key={
+                event.id
+              }
+
+              weddingId={
+                weddingId
+              }
+
+              event={
+                event
+              }
+
+              onRefresh={
+                onRefresh
+              }
+
+            />
+
+          )
+        )
+      }
+
     </div>
+
   );
+
 }

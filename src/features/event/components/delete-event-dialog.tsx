@@ -1,49 +1,117 @@
 "use client";
 
-import { useTransition } from "react";
+import {
+  useTransition,
+} from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  Trash2,
+} from "lucide-react";
+
+import {
+  Button,
+} from "@/components/ui/button";
 
 import {
   deleteEventAction,
 } from "../actions/delete-event";
 
+
 interface DeleteEventDialogProps {
+
   eventId: string;
+
   weddingId: string;
+
+  onSuccess?: () => void;
+
 }
 
+
 export function DeleteEventDialog({
+
   eventId,
+
   weddingId,
+
+  onSuccess,
+
 }: DeleteEventDialogProps) {
 
-  const [isPending, startTransition] =
-    useTransition();
+
+  const [
+    pending,
+    startTransition,
+  ] = useTransition();
+
+
 
   function handleDelete() {
 
-    if (!confirm("Delete this event?")) {
+    if(
+      !confirm(
+        "Delete this event?"
+      )
+    ) {
       return;
     }
 
-    startTransition(async () => {
-      await deleteEventAction(
-        eventId,
-        weddingId
-      );
-    });
+
+    startTransition(
+      async () => {
+
+        const result =
+          await deleteEventAction(
+            eventId,
+            weddingId
+          );
+
+
+        if(result.success) {
+
+          onSuccess?.();
+
+        }
+
+      }
+    );
 
   }
 
+
   return (
+
     <Button
+
+      size="icon"
+
       variant="destructive"
-      size="sm"
-      disabled={isPending}
-      onClick={handleDelete}
+
+      className="
+        h-8
+        w-8
+        rounded-full
+      "
+
+      disabled={
+        pending
+      }
+
+      onClick={
+        handleDelete
+      }
+
     >
-      Delete
+
+      <Trash2
+        className="
+          h-4
+          w-4
+        "
+      />
+
     </Button>
+
   );
+
 }

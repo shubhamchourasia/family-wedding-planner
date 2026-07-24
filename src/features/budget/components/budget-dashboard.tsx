@@ -18,10 +18,7 @@ export function BudgetDashboard({
 
   const estimated =
     budgetItems.reduce(
-      (
-        sum,
-        item
-      ) =>
+      (sum, item) =>
         sum + item.estimated,
       0
     );
@@ -29,10 +26,7 @@ export function BudgetDashboard({
 
   const actual =
     budgetItems.reduce(
-      (
-        sum,
-        item
-      ) =>
+      (sum, item) =>
         sum + (item.actual ?? 0),
       0
     );
@@ -40,10 +34,7 @@ export function BudgetDashboard({
 
   const paid =
     budgetItems.reduce(
-      (
-        sum,
-        item
-      ) =>
+      (sum, item) =>
         sum + (item.paid ?? 0),
       0
     );
@@ -53,16 +44,30 @@ export function BudgetDashboard({
     estimated - actual;
 
 
+  const cardClass =
+    `
+    rounded-2xl
+    border
+    border-amber-100
+    workspace-card
+    p-5
+    shadow-sm
+    transition
+    hover:shadow-md
+    `;
+
+
   return (
     <div className="grid gap-4 md:grid-cols-5">
 
-      <div className="rounded-xl border bg-white p-5">
 
-        <p className="text-sm text-muted-foreground">
+      <div className={cardClass}>
+
+        <p className="text-sm font-medium text-stone-500">
           Overall Budget
         </p>
 
-        <p className="mt-2 text-2xl font-semibold">
+        <p className="mt-2 text-2xl font-bold text-stone-900">
           ₹
           {
             overallBudget?.toLocaleString(
@@ -74,13 +79,14 @@ export function BudgetDashboard({
       </div>
 
 
-      <div className="rounded-xl border bg-white p-5">
 
-        <p className="text-sm text-muted-foreground">
+      <div className={cardClass}>
+
+        <p className="text-sm font-medium text-stone-500">
           Estimated
         </p>
 
-        <p className="mt-2 text-2xl font-semibold">
+        <p className="mt-2 text-2xl font-bold text-stone-900">
           ₹
           {
             estimated.toLocaleString(
@@ -92,13 +98,14 @@ export function BudgetDashboard({
       </div>
 
 
-      <div className="rounded-xl border bg-white p-5">
 
-        <p className="text-sm text-muted-foreground">
+      <div className={cardClass}>
+
+        <p className="text-sm font-medium text-stone-500">
           Actual
         </p>
 
-        <p className="mt-2 text-2xl font-semibold">
+        <p className="mt-2 text-2xl font-bold text-stone-900">
           ₹
           {
             actual.toLocaleString(
@@ -110,13 +117,14 @@ export function BudgetDashboard({
       </div>
 
 
-      <div className="rounded-xl border bg-white p-5">
 
-        <p className="text-sm text-muted-foreground">
+      <div className={cardClass}>
+
+        <p className="text-sm font-medium text-stone-500">
           Paid
         </p>
 
-        <p className="mt-2 text-2xl text-green-600 font-semibold">
+        <p className="mt-2 text-2xl font-bold text-green-600">
           ₹
           {
             paid.toLocaleString(
@@ -128,13 +136,23 @@ export function BudgetDashboard({
       </div>
 
 
-      <div className="rounded-xl border bg-white p-5">
 
-        <p className="text-sm text-muted-foreground">
+      <div className={cardClass}>
+
+        <p className="text-sm font-medium text-stone-500">
           Remaining
         </p>
 
-        <p className="mt-2 text-2xl font-semibold">
+        <p className={`
+          mt-2
+          text-2xl
+          font-bold
+          ${
+            remaining >= 0
+              ? "text-green-600"
+              : "text-red-600"
+          }
+        `}>
           ₹
           {
             remaining.toLocaleString(
@@ -144,6 +162,7 @@ export function BudgetDashboard({
         </p>
 
       </div>
+
 
     </div>
   );

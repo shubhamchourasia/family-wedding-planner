@@ -22,7 +22,7 @@ export function GuestCard({
   guest,
 }: GuestCardProps) {
   return (
-    <div className="rounded-xl border bg-white p-6 shadow-sm transition hover:shadow-md">
+    <div className="rounded-2xl border border-amber-100 workspace-card p-8 shadow-sm">
 
       <div className="flex items-start justify-between">
 

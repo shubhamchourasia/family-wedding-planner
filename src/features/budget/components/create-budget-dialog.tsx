@@ -23,28 +23,38 @@ import {
 
 interface CreateBudgetDialogProps {
   weddingId: string;
+  onSuccess?: () => void | Promise<void>;
 }
 
 
 export function CreateBudgetDialog({
   weddingId,
+  onSuccess,
 }: CreateBudgetDialogProps) {
+
 
   const [
     open,
     setOpen,
-  ] =
-    useState(false);
+  ] = useState(false);
+
+
+
+  async function handleSuccess() {
+
+    setOpen(false);
+
+    await onSuccess?.();
+
+  }
+
 
 
   return (
+
     <Dialog
-      open={
-        open
-      }
-      onOpenChange={
-        setOpen
-      }
+      open={open}
+      onOpenChange={setOpen}
     >
 
       <DialogTrigger
@@ -67,17 +77,20 @@ export function CreateBudgetDialog({
         </DialogHeader>
 
 
+
         <BudgetForm
-          weddingId={
-            weddingId
-          }
-          onSuccess={() =>
-            setOpen(false)
-          }
+
+          weddingId={weddingId}
+
+          onSuccess={handleSuccess}
+
         />
+
 
       </DialogContent>
 
+
     </Dialog>
+
   );
 }

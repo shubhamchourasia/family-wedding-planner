@@ -22,13 +22,6 @@ export const weddingSchema = z.object({
   }),
 
 
-  endDate: z
-    .coerce.date({
-      error: "Invalid wedding end date",
-    })
-    .optional(),
-
-
   location: z
     .string()
     .optional(),

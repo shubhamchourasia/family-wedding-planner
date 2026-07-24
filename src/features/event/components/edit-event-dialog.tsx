@@ -1,6 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useState,
+} from "react";
+
+import {
+  Pencil,
+} from "lucide-react";
 
 import {
   Dialog,
@@ -9,37 +15,75 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { Button } from "@/components/ui/button";
+import {
+  Button,
+} from "@/components/ui/button";
 
-import { EventForm } from "./event-form";
+import {
+  EventForm,
+} from "./event-form";
+
 
 interface EditEventDialogProps {
   event: any;
   weddingId: string;
+  onSuccess?: () => void;
 }
+
 
 export function EditEventDialog({
   event,
   weddingId,
+  onSuccess,
 }: EditEventDialogProps) {
 
-  const [open, setOpen] = useState(false);
+  const [
+    open,
+    setOpen,
+  ] = useState(false);
+
+
+  function handleSuccess() {
+
+    setOpen(false);
+
+    onSuccess?.();
+
+  }
+
 
   return (
     <>
       <Button
-        size="sm"
+        size="icon"
         variant="outline"
-        onClick={() => setOpen(true)}
+        className="
+          h-8
+          w-8
+          rounded-full
+          hover:bg-amber-50
+        "
+        onClick={() =>
+          setOpen(true)
+        }
       >
-        Edit
+        <Pencil
+          className="
+            h-4
+            w-4
+          "
+        />
       </Button>
+
 
       <Dialog
         open={open}
         onOpenChange={setOpen}
       >
-        <DialogContent className="max-w-2xl">
+
+        <DialogContent
+          className="max-w-2xl"
+        >
 
           <DialogHeader>
 
@@ -49,15 +93,30 @@ export function EditEventDialog({
 
           </DialogHeader>
 
+
           <EventForm
-            weddingId={weddingId}
-            event={event}
+
+            weddingId={
+              weddingId
+            }
+
+            event={
+              event
+            }
+
             mode="edit"
-            onSuccess={() => setOpen(false)}
+
+            onSuccess={
+              handleSuccess
+            }
+
           />
 
         </DialogContent>
+
       </Dialog>
+
     </>
   );
+
 }

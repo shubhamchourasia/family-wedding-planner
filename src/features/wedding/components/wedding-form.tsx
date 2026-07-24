@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ import {
 } from "../schemas/wedding.schema";
 
 import { createWeddingAction } from "../actions/create-wedding";
+import { updateWeddingAction } from "../actions/update-wedding";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,12 +27,23 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 interface WeddingFormProps {
+  wedding?: {
+    id: string;
+    title: string;
+    brideName: string;
+    groomName: string;
+    startDate: Date;
+    location: string | null;
+    description: string | null;
+  };
   onSuccess?: () => void;
 }
 
 export function WeddingForm({
+  wedding,
   onSuccess,
 }: WeddingFormProps) {
+
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<WeddingFormInput>({
@@ -45,9 +57,28 @@ export function WeddingForm({
     },
   });
 
+  useEffect(() => {
+    if (!wedding) return;
+
+    form.reset({
+      title: wedding.title,
+      brideName: wedding.brideName,
+      groomName: wedding.groomName,
+      location: wedding.location ?? "",
+      description: wedding.description ?? "",
+      startDate: new Date(wedding.startDate)
+        .toISOString()
+        .split("T")[0],
+    } as WeddingFormInput);
+  }, [wedding, form]);
+
   function onSubmit(values: WeddingFormInput) {
+
     startTransition(async () => {
-      const result = await createWeddingAction(values);
+
+      const result = wedding
+        ? await updateWeddingAction(wedding.id, values)
+        : await createWeddingAction(values);
 
       if (!result.success) {
         console.error(result.error);
@@ -56,15 +87,20 @@ export function WeddingForm({
 
       form.reset();
       onSuccess?.();
+
     });
+
   }
 
   return (
+
     <form
       onSubmit={form.handleSubmit(onSubmit)}
       className="space-y-6"
     >
+
       <div>
+
         <h3 className="flex items-center gap-2 text-lg font-semibold">
           <Heart className="h-5 w-5 text-rose-500" />
           Wedding Details
@@ -73,17 +109,20 @@ export function WeddingForm({
         <p className="mt-1 text-sm text-muted-foreground">
           Enter the basic information about your wedding.
         </p>
+
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
+
         <div>
+
           <Label className="mb-2 flex items-center gap-2">
             <ScrollText className="h-4 w-4" />
             Wedding Title
           </Label>
 
           <Input
-            placeholder="Shubham & Aakriti Wedding"
+            placeholder=""
             {...form.register("title")}
           />
 
@@ -92,16 +131,18 @@ export function WeddingForm({
               {form.formState.errors.title.message}
             </p>
           )}
+
         </div>
 
         <div>
+
           <Label className="mb-2 flex items-center gap-2">
             <MapPin className="h-4 w-4" />
             Location
           </Label>
 
           <Input
-            placeholder="Dhanbad, Jharkhand"
+            placeholder=""
             {...form.register("location")}
           />
 
@@ -110,16 +151,18 @@ export function WeddingForm({
               {form.formState.errors.location.message}
             </p>
           )}
+
         </div>
 
         <div>
+
           <Label className="mb-2 flex items-center gap-2">
             <Users className="h-4 w-4" />
             Bride Name
           </Label>
 
           <Input
-            placeholder="Aakriti Salampuria"
+            placeholder=""
             {...form.register("brideName")}
           />
 
@@ -128,16 +171,18 @@ export function WeddingForm({
               {form.formState.errors.brideName.message}
             </p>
           )}
+
         </div>
 
         <div>
+
           <Label className="mb-2 flex items-center gap-2">
             <Users className="h-4 w-4" />
             Groom Name
           </Label>
 
           <Input
-            placeholder="Shubham Chourasia"
+            placeholder=""
             {...form.register("groomName")}
           />
 
@@ -146,12 +191,14 @@ export function WeddingForm({
               {form.formState.errors.groomName.message}
             </p>
           )}
+
         </div>
 
         <div>
+
           <Label className="mb-2 flex items-center gap-2">
             <CalendarDays className="h-4 w-4" />
-            Start Date
+            Wedding Date
           </Label>
 
           <Input
@@ -164,28 +211,13 @@ export function WeddingForm({
               {String(form.formState.errors.startDate.message)}
             </p>
           )}
+
         </div>
 
-        <div>
-          <Label className="mb-2 flex items-center gap-2">
-            <CalendarDays className="h-4 w-4" />
-            End Date
-          </Label>
-
-          <Input
-            type="date"
-            {...form.register("endDate")}
-          />
-
-          {form.formState.errors.endDate && (
-            <p className="mt-1 text-sm text-red-500">
-              {String(form.formState.errors.endDate.message)}
-            </p>
-          )}
-        </div>
       </div>
 
       <div>
+
         <Label className="mb-2">
           Description
         </Label>
@@ -201,9 +233,11 @@ export function WeddingForm({
             {form.formState.errors.description.message}
           </p>
         )}
+
       </div>
 
       <div className="flex justify-end gap-3 border-t pt-5">
+
         <Button
           type="button"
           variant="outline"
@@ -216,9 +250,19 @@ export function WeddingForm({
           type="submit"
           disabled={isPending}
         >
-          {isPending ? "Creating..." : "Create Wedding"}
+          {isPending
+            ? wedding
+              ? "Updating..."
+              : "Creating..."
+            : wedding
+              ? "Update Wedding"
+              : "Create Wedding"}
         </Button>
+
       </div>
+
     </form>
+
   );
+
 }

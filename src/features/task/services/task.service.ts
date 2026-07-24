@@ -50,13 +50,25 @@ export async function getTaskListsByWedding(
     where: {
       weddingId,
     },
+
     include: {
       tasks: {
+        select: {
+          id: true,
+          title: true,
+          category: true,
+          addedBy: true,
+          dueDate: true,
+          completed: true,
+          remarks: true,
+        },
+
         orderBy: {
           createdAt: "desc",
         },
       },
     },
+
     orderBy: {
       createdAt: "asc",
     },
@@ -87,20 +99,40 @@ export async function createTask(
 
 export async function updateTask(
   id: string,
-  data: {
+  values: {
     title: string;
-    category: TaskCategory;
+    category: any;
     dueDate?: Date | null;
     remarks?: string | null;
-    addedBy: TaskAddedBy;
+    addedBy: any;
   }
 ) {
+
   return prisma.task.update({
-    where: {
+
+    where:{
       id,
     },
-    data,
+
+    data:{
+      title:
+        values.title,
+
+      category:
+        values.category,
+
+      addedBy:
+        values.addedBy,
+
+      dueDate:
+        values.dueDate ?? null,
+
+      remarks:
+        values.remarks ?? null,
+    },
+
   });
+
 }
 
 export async function deleteTask(

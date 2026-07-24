@@ -5,13 +5,16 @@ import {
   useTransition,
 } from "react";
 
+
 import {
   deleteTaskListAction,
 } from "../actions/delete-task-list";
 
+
 import {
   Button,
 } from "@/components/ui/button";
+
 
 import {
   Dialog,
@@ -21,67 +24,106 @@ import {
 } from "@/components/ui/dialog";
 
 
+
 interface DeleteTaskListDialogProps {
+
   weddingId:string;
+
   taskListId:string;
+
+  onSuccess?:()=>void | Promise<void>;
+
 }
 
 
+
 export function DeleteTaskListDialog({
+
   weddingId,
   taskListId,
+  onSuccess,
+
 }:DeleteTaskListDialogProps){
+
 
   const [
     open,
     setOpen,
-  ]=useState(false);
+  ] = useState(false);
+
 
 
   const [
     pending,
     startTransition,
-  ]=useTransition();
+  ] = useTransition();
+
 
 
   function handleDelete(){
 
+
     startTransition(async()=>{
 
-      const result=
+
+      const result =
         await deleteTaskListAction(
           weddingId,
           taskListId
         );
 
 
+
       if(result.success){
+
         setOpen(false);
+
+        onSuccess?.();
+
       }
 
+
     });
+
 
   }
 
 
-  return(
+
+  return (
+
     <Dialog
-      open={open}
-      onOpenChange={setOpen}
+
+      open={
+        open
+      }
+
+      onOpenChange={
+        setOpen
+      }
+
     >
 
+
       <Button
+
         size="sm"
+
         variant="destructive"
+
         onClick={()=>
           setOpen(true)
         }
+
       >
         Delete List
       </Button>
 
 
+
+
       <DialogContent>
+
 
         <DialogHeader>
 
@@ -92,33 +134,54 @@ export function DeleteTaskListDialog({
         </DialogHeader>
 
 
-        <p>
+
+        <p className="text-sm text-muted-foreground">
+
           This will delete the list and all tasks inside it.
+
         </p>
 
 
-        <div className="flex justify-end gap-2">
+
+        <div className="flex justify-end gap-3">
+
 
           <Button
+
             variant="outline"
+
             onClick={()=>
               setOpen(false)
             }
+
           >
+
             Cancel
+
           </Button>
 
 
+
           <Button
+
             variant="destructive"
-            disabled={pending}
-            onClick={handleDelete}
+
+            disabled={
+              pending
+            }
+
+            onClick={
+              handleDelete
+            }
+
           >
+
             {
               pending
               ? "Deleting..."
               : "Delete"
             }
+
           </Button>
 
 
@@ -129,5 +192,7 @@ export function DeleteTaskListDialog({
 
 
     </Dialog>
+
   );
+
 }

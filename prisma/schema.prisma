@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  	id         String    @id @default(cuid())
+  id         String    @id @default(cuid())
 	authId     String?    @unique
 	email      String    @unique
 	username   String?    @unique
@@ -16,7 +16,7 @@ model User {
 	role       UserRole  @default(FAMILY)
 	createdAt  DateTime  @default(now())
 	updatedAt  DateTime  @updatedAt
-    weddings   Wedding[]
+  weddings   Wedding[]
 }
 
 model Wedding {
@@ -25,7 +25,6 @@ model Wedding {
   brideName     String
   groomName     String
   startDate     DateTime
-  endDate       DateTime?
   ownerId       String
   overallBudget Float?
   createdAt     DateTime            @default(now())

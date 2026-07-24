@@ -2,149 +2,129 @@
 
 import {
   useState,
-  useTransition,
 } from "react";
 
-import {
-  Button,
-} from "@/components/ui/button";
 
 import {
-  Input,
-} from "@/components/ui/input";
+  Pencil,
+} from "lucide-react";
 
-import {
-  Label,
-} from "@/components/ui/label";
 
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 
+
 import {
-  updateTaskAction,
-} from "../actions/update-task";
+  TaskForm,
+} from "./task-form";
+
+
+import type {
+  TaskCategory,
+  TaskAddedBy,
+} from "@prisma/client";
+
 
 
 interface EditTaskDialogProps {
-  weddingId: string;
-  task: {
-    id: string;
-    title: string;
-    category: string;
-    addedBy: string;
-    dueDate: Date | null;
-    remarks: string | null;
+
+  weddingId:string;
+
+  task:{
+    id:string;
+    title:string;
+    category:TaskCategory;
+    addedBy:TaskAddedBy;
+    dueDate:Date|null;
+    completed:boolean;
+    remarks:string|null;
   };
+
+  onSuccess?:()=>void | Promise<void>;
+
 }
 
 
+
 export function EditTaskDialog({
+
   weddingId,
   task,
-}: EditTaskDialogProps) {
+  onSuccess,
+
+}:EditTaskDialogProps){
+
 
   const [
     open,
     setOpen,
   ] = useState(false);
 
-  const [
-    pending,
-    startTransition,
-  ] = useTransition();
 
 
-  const [
-    title,
-    setTitle,
-  ] = useState(task.title);
+async function handleSuccess(){
 
+  setOpen(false);
 
-  const [
-    category,
-    setCategory,
-  ] = useState(task.category);
+  await onSuccess?.();
 
+}
 
-  const [
-    addedBy,
-    setAddedBy,
-  ] = useState(task.addedBy);
-
-
-  const [
-    dueDate,
-    setDueDate,
-  ] = useState(
-    task.dueDate
-      ? new Date(task.dueDate)
-          .toISOString()
-          .split("T")[0]
-      : ""
-  );
-
-
-  const [
-    remarks,
-    setRemarks,
-  ] = useState(
-    task.remarks ?? ""
-  );
-
-
-  function handleSubmit() {
-
-    startTransition(
-      async () => {
-
-        const result =
-          await updateTaskAction(
-            weddingId,
-            task.id,
-            {
-              title,
-              category,
-              addedBy,
-              dueDate: dueDate
-                ? new Date(dueDate)
-                : null,
-              remarks,
-            }
-          );
-
-
-        if (result.success) {
-          setOpen(false);
-        }
-
-      }
-    );
-
-  }
 
 
   return (
+
     <Dialog
-      open={open}
-      onOpenChange={setOpen}
+
+      open={
+        open
+      }
+
+      onOpenChange={
+        setOpen
+      }
+
     >
 
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() =>
-          setOpen(true)
+
+      <DialogTrigger
+
+        render={
+
+          <button
+            className="
+              rounded-md
+              border
+              p-2
+              hover:bg-gray-100
+            "
+          >
+
+            <Pencil className="h-4 w-4" />
+
+          </button>
+
         }
+
+      />
+
+
+
+      <DialogContent
+
+        className="
+          max-w-2xl
+          max-h-[90vh]
+          overflow-y-auto
+        "
+
       >
-        Edit
-      </Button>
 
-
-      <DialogContent>
 
         <DialogHeader>
 
@@ -155,122 +135,31 @@ export function EditTaskDialog({
         </DialogHeader>
 
 
-        <div className="space-y-4">
 
+        <TaskForm
 
-          <div className="space-y-2">
+          weddingId={
+            weddingId
+          }
 
-            <Label>
-              Task Name
-            </Label>
+          mode="edit"
 
-            <Input
-              value={title}
-              onChange={(e)=>
-                setTitle(
-                  e.target.value
-                )
-              }
-            />
+          task={
+            task
+          }
 
-          </div>
+          onSuccess={
+            handleSuccess
+          }
 
-
-          <div className="space-y-2">
-
-            <Label>
-              Category
-            </Label>
-
-            <Input
-              value={category}
-              onChange={(e)=>
-                setCategory(
-                  e.target.value
-                )
-              }
-            />
-
-          </div>
-
-
-          <div className="space-y-2">
-
-            <Label>
-              Added By
-            </Label>
-
-            <Input
-              value={addedBy}
-              onChange={(e)=>
-                setAddedBy(
-                  e.target.value
-                )
-              }
-            />
-
-          </div>
-
-
-          <div className="space-y-2">
-
-            <Label>
-              Due Date
-            </Label>
-
-            <Input
-              type="date"
-              value={dueDate}
-              onChange={(e)=>
-                setDueDate(
-                  e.target.value
-                )
-              }
-            />
-
-          </div>
-
-
-          <div className="space-y-2">
-
-            <Label>
-              Remarks
-            </Label>
-
-            <Input
-              value={remarks}
-              onChange={(e)=>
-                setRemarks(
-                  e.target.value
-                )
-              }
-            />
-
-          </div>
-
-
-          <div className="flex justify-end">
-
-            <Button
-              disabled={pending}
-              onClick={handleSubmit}
-            >
-              {
-                pending
-                  ? "Saving..."
-                  : "Update Task"
-              }
-            </Button>
-
-          </div>
-
-
-        </div>
+        />
 
 
       </DialogContent>
 
 
     </Dialog>
+
   );
+
 }

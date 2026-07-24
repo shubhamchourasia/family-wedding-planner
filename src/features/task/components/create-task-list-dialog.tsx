@@ -2,7 +2,9 @@
 
 import {
   useState,
+  useTransition,
 } from "react";
+
 
 import {
   Dialog,
@@ -11,77 +13,119 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+
 import {
   Button,
 } from "@/components/ui/button";
+
 
 import {
   Input,
 } from "@/components/ui/input";
 
+
 import {
   Label,
 } from "@/components/ui/label";
+
 
 import {
   createTaskListAction,
 } from "../actions/create-task-list";
 
+
+
 interface CreateTaskListDialogProps {
-  weddingId: string;
-  onSuccess?: () => void;
+
+  weddingId:string;
+
+  onSuccess?:()=>void | Promise<void>;
+
 }
 
+
+
 export function CreateTaskListDialog({
+
   weddingId,
   onSuccess,
-}: CreateTaskListDialogProps) {
+
+}:CreateTaskListDialogProps){
+
 
   const [
     open,
     setOpen,
   ] = useState(false);
 
+
+  const [
+    pending,
+    startTransition,
+  ] = useTransition();
+
+
+
   const [
     name,
     setName,
   ] = useState("");
 
-  async function handleSubmit() {
 
-    const result =
-      await createTaskListAction(
-        weddingId,
-        name
-      );
 
-    if (result.success) {
+  function handleSubmit(){
 
-      setName("");
+    startTransition(async()=>{
 
-      setOpen(false);
 
-      onSuccess?.();
+      const result =
+        await createTaskListAction(
+          weddingId,
+          name
+        );
 
-    }
+
+      if(result.success){
+
+        setName("");
+
+        setOpen(false);
+
+        onSuccess?.();
+
+      }
+
+
+    });
 
   }
 
+
+
   return (
+
     <Dialog
-      open={open}
-      onOpenChange={setOpen}
+      open={
+        open
+      }
+      onOpenChange={
+        setOpen
+      }
     >
 
+
       <Button
-        onClick={() =>
+        onClick={()=>
           setOpen(true)
         }
       >
         Add Task List
       </Button>
 
+
+
       <DialogContent>
+
 
         <DialogHeader>
 
@@ -91,7 +135,10 @@ export function CreateTaskListDialog({
 
         </DialogHeader>
 
+
+
         <div className="space-y-4">
+
 
           <div className="space-y-2">
 
@@ -99,27 +146,57 @@ export function CreateTaskListDialog({
               Task List Name
             </Label>
 
+
             <Input
+
               placeholder="Wedding Preparation"
-              value={name}
-              onChange={(e) =>
-                setName(e.target.value)
+
+              value={
+                name
               }
+
+              onChange={(e)=>
+                setName(
+                  e.target.value
+                )
+              }
+
             />
 
           </div>
 
+
+
           <Button
-            onClick={handleSubmit}
+
+            disabled={
+              pending ||
+              !name.trim()
+            }
+
+            onClick={
+              handleSubmit
+            }
+
           >
-            Create
+
+            {
+              pending
+              ? "Creating..."
+              : "Create"
+            }
+
           </Button>
+
 
         </div>
 
+
       </DialogContent>
 
+
     </Dialog>
+
   );
 
 }

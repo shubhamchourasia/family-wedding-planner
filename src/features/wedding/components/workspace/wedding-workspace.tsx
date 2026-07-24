@@ -1,13 +1,9 @@
 "use client";
 
 import {
+  useEffect,
   useState,
 } from "react";
-
-import type {
-  TaskCategory,
-  TaskAddedBy,
-} from "@prisma/client";
 
 import {
   WeddingHeader,
@@ -35,49 +31,36 @@ import {
 } from "@/features/budget/components/wedding-budget";
 
 import {
-  WeddingVendors,
-} from "./wedding-vendors";
-
-import {
-  WeddingDocuments,
-} from "./wedding-documents";
-
-import {
   TaskDashboard,
 } from "@/features/task/components/task-dashboard";
 
+import {
+  useWeddingTabData,
+} from "@/features/wedding/hooks/use-wedding-tab-data";
+
 
 interface WeddingWorkspaceProps {
+
   wedding: {
+
     id: string;
+
     title: string;
+
     brideName: string;
+
     groomName: string;
+
     location: string | null;
+
     startDate: Date;
-    endDate: Date | null;
+
     description: string | null;
+
     overallBudget: number | null;
 
-    guests: any[];
-    events: any[];
-    budgetItems: any[];
-    vendors: any[];
-    documents: any[];
-
-    taskLists: Array<{
-      id: string;
-      name: string;
-      tasks: Array<{
-        id: string;
-        title: string;
-        category: string;
-        addedBy: string;
-        dueDate: Date | null;
-        remarks: string | null;
-      }>;
-    }>;
   };
+
 }
 
 
@@ -85,102 +68,333 @@ export function WeddingWorkspace({
   wedding,
 }: WeddingWorkspaceProps) {
 
+
   const [
     activeTab,
     setActiveTab,
-  ] = useState<WeddingTab>("Overview");
+  ] = useState<WeddingTab>(
+    "Overview"
+  );
+
+
+  const {
+    data,
+    loading,
+    loadTab,
+    refreshTab,
+  } = useWeddingTabData(
+    wedding.id
+  );
+
+
+
+  useEffect(() => {
+
+    if (
+      activeTab !== "Overview"
+    ) {
+
+      loadTab(
+        activeTab
+      );
+
+    }
+
+  }, [
+    activeTab,
+    loadTab,
+  ]);
+
 
 
   return (
-    <div className="space-y-6">
 
-      <WeddingHeader
-        wedding={wedding}
+    <div
+      className="
+        relative
+        min-h-screen
+        overflow-hidden
+      "
+    >
+
+
+      <div
+        className="
+          absolute
+          inset-0
+          bg-cover
+          bg-center
+          bg-no-repeat
+        "
+        style={{
+          backgroundImage:
+            "url('/images/wedding-bg.jpg')",
+        }}
       />
 
 
-      <WeddingTabs
-        activeTab={activeTab}
-        onChange={setActiveTab}
+      <div
+        className="
+          absolute
+          inset-0
+          bg-[#faf7f2]/65
+        "
       />
 
 
-      {
-        activeTab === "Overview" && (
-          <WeddingOverview
-            wedding={wedding}
-          />
-        )
-      }
+      <div
+        className="
+          relative
+          z-10
+          space-y-6
+          px-4
+          py-6
+        "
+      >
 
 
-      {
-        activeTab === "Events" && (
-          <WeddingEvents
-            wedding={wedding}
-          />
-        )
-      }
+        <WeddingHeader
+          wedding={wedding}
+        />
 
 
-      {
-        activeTab === "Guests" && (
-          <WeddingGuests
-            weddingId={
-              wedding.id
-            }
-            guests={
-              wedding.guests
-            }
-          />
-        )
-      }
+        <WeddingTabs
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
 
 
-      {
-        activeTab === "Budget" && (
-          <WeddingBudget
-            weddingId={
-              wedding.id
-            }
-            overallBudget={
-              wedding.overallBudget
-            }
-            budgetItems={
-              wedding.budgetItems
-            }
-          />
-        )
-      }
+
+        {
+          activeTab === "Overview" && (
+
+            <WeddingOverview
+              wedding={{
+                ...wedding,
+              }}
+            />
+
+          )
+        }
 
 
-      {
-        activeTab === "Vendors" && (
-          <WeddingVendors />
-        )
-      }
+
+        {
+          activeTab === "Events" && (
+
+            loading ? (
+
+              <LoadingCard />
+
+            ) : (
+
+              <WeddingEvents
+
+                wedding={{
+                  id: wedding.id,
+
+                  events:
+                    data.events,
+
+                }}
+
+                onRefresh={() =>
+                  refreshTab("Events")
+                }
+
+              />
+
+            )
+
+          )
+        }
 
 
-      {
-        activeTab === "Tasks" && (
-          <TaskDashboard
-            weddingId={
-              wedding.id
-            }
-            taskLists={
-              wedding.taskLists
-            }
-          />
-        )
-      }
+
+        {
+          activeTab === "Guests" && (
+
+            loading ? (
+
+              <LoadingCard />
+
+            ) : (
+
+              <WeddingGuests
+
+                weddingId={
+                  wedding.id
+                }
+
+                events={
+                  data.events
+                }
+
+                guests={
+                  data.guests
+                }
+
+                onRefresh={() =>
+                  refreshTab("Guests")
+                }
+
+              />
+
+            )
+
+          )
+        }
 
 
-      {
-        activeTab === "Documents" && (
-          <WeddingDocuments />
-        )
-      }
+
+        {
+          activeTab === "Budget" && (
+
+            loading ? (
+
+              <LoadingCard />
+
+            ) : (
+
+              <WeddingBudget
+
+                weddingId={
+                  wedding.id
+                }
+
+                overallBudget={
+                  wedding.overallBudget
+                }
+
+                budgetItems={
+                  data.budgetItems
+                }
+
+                onRefresh={() =>
+                  refreshTab("Budget")
+                }
+
+              />
+
+            )
+
+          )
+        }
+
+
+
+        {
+          activeTab === "Tasks" && (
+
+            loading ? (
+
+              <LoadingCard />
+
+            ) : (
+
+              <TaskDashboard
+
+                weddingId={
+                  wedding.id
+                }
+
+                taskLists={
+                  data.taskLists
+                }
+
+                onRefresh={() =>
+                  refreshTab("Tasks")
+                }
+
+              />
+
+            )
+
+          )
+        }
+
+
+
+        {
+          activeTab === "Vendors" && (
+
+            <PlaceholderCard
+              title="Vendors"
+            />
+
+          )
+        }
+
+
+
+        {
+          activeTab === "Documents" && (
+
+            <PlaceholderCard
+              title="Documents"
+            />
+
+          )
+        }
+
+
+      </div>
+
 
     </div>
+
   );
+
+}
+
+
+
+function LoadingCard() {
+
+  return (
+
+    <div
+      className="
+        rounded-xl
+        bg-white
+        p-6
+        text-center
+        text-gray-500
+      "
+    >
+
+      Loading...
+
+    </div>
+
+  );
+
+}
+
+
+
+function PlaceholderCard({
+  title,
+}: {
+  title: string;
+}) {
+
+  return (
+
+    <div
+      className="
+        rounded-xl
+        bg-white
+        p-6
+        text-center
+        text-gray-500
+      "
+    >
+
+      {title} will load here.
+
+    </div>
+
+  );
+
 }

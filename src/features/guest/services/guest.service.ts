@@ -8,25 +8,36 @@ export async function createGuest(
   weddingId: string,
   data: GuestInput
 ) {
+  const {
+    eventIds = [],
+    ...guestData
+  } = data;
+
   return prisma.guest.create({
     data: {
       weddingId,
 
-      fullName: data.fullName,
+      fullName: guestData.fullName,
 
-      phone: data.phone || null,
+      phone: guestData.phone || null,
 
-      email: data.email || null,
+      email: guestData.email || null,
 
-      side: data.side,
+      side: guestData.side,
 
-      food: data.food,
+      food: guestData.food,
 
-      relation: data.relation || null,
+      relation: guestData.relation || null,
 
-      city: data.city || null,
+      city: guestData.city || null,
 
-      notes: data.notes || null,
+      notes: guestData.notes || null,
+
+      events: {
+        create: eventIds.map((eventId) => ({
+          eventId,
+        })),
+      },
     },
   });
 }
@@ -37,6 +48,14 @@ export async function getGuestsByWedding(
   return prisma.guest.findMany({
     where: {
       weddingId,
+    },
+
+    include: {
+      events: {
+        include: {
+          event: true,
+        },
+      },
     },
 
     orderBy: {
@@ -50,6 +69,11 @@ export async function updateGuest(
   weddingId: string,
   data: GuestInput
 ) {
+  const {
+    eventIds = [],
+    ...guestData
+  } = data;
+
   return prisma.guest.update({
     where: {
       id: guestId,
@@ -57,21 +81,29 @@ export async function updateGuest(
     },
 
     data: {
-      fullName: data.fullName,
+      fullName: guestData.fullName,
 
-      phone: data.phone || null,
+      phone: guestData.phone || null,
 
-      email: data.email || null,
+      email: guestData.email || null,
 
-      side: data.side,
+      side: guestData.side,
 
-      food: data.food,
+      food: guestData.food,
 
-      relation: data.relation || null,
+      relation: guestData.relation || null,
 
-      city: data.city || null,
+      city: guestData.city || null,
 
-      notes: data.notes || null,
+      notes: guestData.notes || null,
+
+      events: {
+        deleteMany: {},
+
+        create: eventIds.map((eventId) => ({
+          eventId,
+        })),
+      },
     },
   });
 }

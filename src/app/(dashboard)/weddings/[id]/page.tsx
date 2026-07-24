@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
 
-import { WeddingWorkspace } from "@/features/wedding/components/workspace/wedding-workspace";
+import {
+  WeddingWorkspace,
+} from "@/features/wedding/components/workspace/wedding-workspace";
 
 import {
-  getWeddingById,
+  getWeddingOverview,
 } from "@/features/wedding/services/wedding.service";
+
 
 interface WeddingPageProps {
   params: Promise<{
@@ -12,22 +15,29 @@ interface WeddingPageProps {
   }>;
 }
 
+
 export default async function WeddingPage({
   params,
 }: WeddingPageProps) {
 
-  const { id } = await params;
+  const {
+    id,
+  } = await params;
+
 
   const wedding =
-    await getWeddingById(id);
+    await getWeddingOverview(id);
+
 
   if (!wedding) {
     notFound();
   }
+
 
   return (
     <WeddingWorkspace
       wedding={wedding}
     />
   );
+
 }

@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
+
 import {
     Users,
     Wallet,
@@ -7,116 +8,199 @@ import {
     Camera,
     Sparkles,
     HeartHandshake,
+    CalendarDays,
+    HandHeart,
 } from "lucide-react";
+
 
 export default function AboutPage() {
     return (
         <>
             <Navbar />
 
-            <main className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
+            <main className="min-h-screen bg-gradient-to-b from-amber-50 via-[#fff9ed] to-white">
+
                 <section className="mx-auto max-w-6xl px-6 py-16">
+
+
                     {/* Hero */}
                     <div className="text-center">
-                        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-rose-100">
-                            <HeartHandshake className="h-10 w-10 text-rose-700" />
+
+                        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-amber-100 shadow-sm">
+                            <HeartHandshake className="h-12 w-12 text-amber-700" />
                         </div>
 
-                        <h1 className="mt-6 text-5xl font-bold text-rose-900">
-                            About Family Wedding Planner
+
+                        <h1 className="mt-8 text-5xl font-bold text-amber-950">
+                            Family Wedding Planner
                         </h1>
 
-                        <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-gray-600">
-                            Family Wedding Planner is an all-in-one platform designed to make
-                            wedding planning simple, organized, and stress-free. It helps
-                            families coordinate every aspect of a wedding while keeping
-                            everyone informed and connected throughout the celebration.
+
+                        <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-stone-600">
+
+                            A beautifully crafted wedding planning workspace designed to
+                            bring families together, simplify coordination, and make every
+                            wedding journey more memorable.
+
                         </p>
                     </div>
 
                     {/* Features */}
+
                     <div className="mt-16 grid gap-8 md:grid-cols-2">
-                        <div className="rounded-2xl border bg-white p-8 shadow-sm transition hover:shadow-md">
-                            <Users className="mb-5 h-9 w-9 text-rose-700" />
-                            <h2 className="text-2xl font-semibold">Guest Management</h2>
 
-                            <p className="mt-3 leading-7 text-gray-600">
-                                Maintain guest lists, organize families, manage invitations,
-                                RSVP status, accommodation, transportation, contact details,
-                                and seating information for both the bride's and groom's
-                                families.
-                            </p>
-                        </div>
 
-                        <div className="rounded-2xl border bg-white p-8 shadow-sm transition hover:shadow-md">
-                            <Wallet className="mb-5 h-9 w-9 text-rose-700" />
-                            <h2 className="text-2xl font-semibold">Budget Management</h2>
+                        {[
+                            {
+                                icon: Users,
+                                title: "Guest Management",
+                                description:
+                                    "Organize guest lists, family groups, invitations, RSVP tracking, accommodation, transportation, and contact details for both bride and groom families."
+                            },
+                            {
+                                icon: Wallet,
+                                title: "Smart Budget Management",
+                                description:
+                                    "Track estimated costs, actual expenses, vendor payments, pending balances, and maintain complete visibility of your wedding finances."
+                            },
+                            {
+                                icon: ClipboardList,
+                                title: "Planning & Checklists",
+                                description:
+                                    "Manage ceremonies, tasks, shopping lists, required items, vendors, and important documents through one collaborative workspace."
+                            },
+                            {
+                                icon: Camera,
+                                title: "Creative Inspirations",
+                                description:
+                                    "Save ideas for decorations, mandap designs, outfits, photography poses, stage setups, and everything that makes your celebrations unique."
+                            },
+                        ].map((feature) => {
 
-                            <p className="mt-3 leading-7 text-gray-600">
-                                Track estimated and actual expenses, vendor payments,
-                                outstanding balances, and overall wedding budget to ensure
-                                expenses stay under control.
-                            </p>
-                        </div>
+                            const Icon = feature.icon;
 
-                        <div className="rounded-2xl border bg-white p-8 shadow-sm transition hover:shadow-md">
-                            <ClipboardList className="mb-5 h-9 w-9 text-rose-700" />
-                            <h2 className="text-2xl font-semibold">
-                                Planning & Checklists
-                            </h2>
+                            return (
+                                <div
+                                    key={feature.title}
+                                    className="
+                                        rounded-2xl
+                                        border
+                                        border-amber-100
+                                        bg-[#fffdf8]
+                                        p-8
+                                        shadow-sm
+                                        transition
+                                        hover:-translate-y-1
+                                        hover:shadow-lg
+                                    "
+                                >
 
-                            <p className="mt-3 leading-7 text-gray-600">
-                                Plan ceremonies, manage tasks, create shopping lists, maintain
-                                required item checklists, organize vendors, and keep important
-                                wedding documents in one place.
-                            </p>
-                        </div>
+                                    <Icon className="mb-5 h-10 w-10 text-amber-700" />
 
-                        <div className="rounded-2xl border bg-white p-8 shadow-sm transition hover:shadow-md">
-                            <Camera className="mb-5 h-9 w-9 text-rose-700" />
-                            <h2 className="text-2xl font-semibold">
-                                Decoration & Photography Inspiration
-                            </h2>
 
-                            <p className="mt-3 leading-7 text-gray-600">
-                                Save inspiration for decorations, mandap designs, stage setups,
-                                bridal and groom poses, couple photography, outfits, and other
-                                creative ideas to make every ceremony memorable.
-                            </p>
-                        </div>
+                                    <h2 className="text-2xl font-semibold text-stone-900">
+                                        {feature.title}
+                                    </h2>
+
+
+                                    <p className="mt-3 leading-7 text-stone-600">
+                                        {feature.description}
+                                    </p>
+
+                                </div>
+                            );
+
+                        })}
+
+
                     </div>
 
-                    {/* Developers */}
-                    <div className="mt-20 rounded-3xl border border-rose-200 bg-rose-100 p-10 shadow-sm">
+
+
+                    {/* Vision */}
+
+                    <div
+                        className="
+                            mt-20
+                            rounded-3xl
+                            border
+                            border-amber-200
+                            bg-gradient-to-r
+                            from-amber-100/70
+                            to-[#fff8e7]
+                            p-10
+                            shadow-sm
+                        "
+                    >
+
                         <div className="flex items-center gap-3">
-                            <Sparkles className="h-8 w-8 text-rose-700" />
 
-                            <h2 className="text-3xl font-bold text-rose-900">
-                                Developed By
+                            <Sparkles className="h-8 w-8 text-amber-700" />
+
+
+                            <h2 className="text-3xl font-bold text-amber-950">
+                                Our Vision
                             </h2>
+
                         </div>
 
-                        <p className="mt-6 text-lg leading-8 text-gray-700">
-                            <strong>Family Wedding Planner</strong> has been designed and
-                            developed by <strong>Shubham Chourasia</strong> and{" "}
-                            <strong>Muskan Salampuria</strong> with the vision of making
-                            wedding planning effortless for families.
+
+                        <p className="mt-6 text-lg leading-8 text-stone-700">
+
+                            <strong>
+                                Family Wedding Planner
+                            </strong>{" "}
+                            was envisioned by{" "}
+                            <strong>
+                                Aakriti Salampuria
+                            </strong>{" "}
+                            and developed by{" "}
+                            <strong>
+                                Shubham Chourasia
+                            </strong>{" "}
+                            and{" "}
+                            <strong>
+                                Muskan Salampuria
+                            </strong>{" "}
+                            with a simple goal — making wedding planning effortless,
+                            organized, and enjoyable for every family.
+
                         </p>
 
-                        <p className="mt-4 leading-8 text-gray-700">
-                            The application provides a centralized workspace for managing
-                            guests, budgets, wedding events, vendors, shopping lists,
-                            required items, important documents, decoration ideas, and
-                            photography inspirations for both the bride's and groom's
-                            families. It enables everyone involved in the wedding to stay
-                            organized, collaborate efficiently, and enjoy a smoother planning
-                            experience from start to finish.
+
+                        <p className="mt-5 leading-8 text-stone-600">
+
+                            The platform brings together guests, budgets, wedding events,
+                            vendors, shopping requirements, documents, decoration ideas,
+                            and photography inspirations into one centralized workspace.
+
+                            🤝 It empowers families to collaborate seamlessly, stay
+                            organized, reduce last-minute stress, and spend more time
+                            celebrating the beautiful moments that make weddings special.
+
                         </p>
+
+
                     </div>
-                </section>
-            </main>
-            <Footer/>
-        </>
 
+
+
+                    {/* Closing */}
+
+                    <div className="mt-16 text-center">
+
+                        <HandHeart className="mx-auto h-10 w-10 text-amber-700" />
+
+                    </div>
+
+
+                </section>
+
+            </main>
+
+
+            <Footer />
+
+        </>
     );
 }

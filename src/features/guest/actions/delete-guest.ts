@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 
 export async function deleteGuestAction(
@@ -9,13 +10,47 @@ export async function deleteGuestAction(
 
   try {
 
-    await prisma.guest.delete({
+    const guest =
+      await prisma.guest.findUnique({
+        where: {
+          id: guestId,
+        },
+        select: {
+          weddingId: true,
+        },
+      });
 
-      where: {
-        id: guestId,
-      },
 
-    });
+    if (!guest) {
+
+      return {
+        success: true,
+      };
+
+    }
+
+
+    await prisma.$transaction([
+
+      prisma.guestEvent.deleteMany({
+        where: {
+          guestId,
+        },
+      }),
+
+
+      prisma.guest.delete({
+        where: {
+          id: guestId,
+        },
+      }),
+
+    ]);
+
+
+    revalidatePath(
+      `/weddings/${guest.weddingId}`
+    );
 
 
     return {
